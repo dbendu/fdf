@@ -1,115 +1,92 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include "fdf.h"
 
-#define rows 30
-#define cols 30
-
-#define FLOAT_TO_INT(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
-
-int max(int a, int b)
+void usage(void)
 {
-	if (a > b)
-		return (a);
-	return (b);
+
 }
 
-void clear_map(char **map)
+t_wnd wnd_init(void)
 {
-	memset(map[0], '.', rows * (cols + 1));
-	for (size_t i = 0; i < rows; ++i)
-		map[i][cols] = '\0';
+	t_wnd wnd;
+
+	wnd.mlxptr = mlx_init();
+	wnd.wndptr = mlx_new_window(wnd.mlxptr, W, H, "fdf");
+	wnd.imgptr = mlx_new_image(wnd.mlxptr, W, H);
+	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes_per_pixel, &wnd.size_line, &wnd.endian);
+	wnd.bytes_per_pixel /= 8;
+	return (wnd);
 }
 
-void print_map(char **map)
+void map_init(t_wnd *wnd)
 {
-	printf("    ");
-	for (int i = 0; i < cols; ++i)
-		printf("%3d", i);
-	printf("\n");
-	for (int i = 0; i < rows; ++i)
+	*(int*)(wnd->img) = __white;
+	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
+}
+
+
+
+int key_press(int keycode, t_wnd *wnd)
+{
+	static int x = 0;
+	static int y = 0;
+	if (keycode == 65307)
+		exit(0);
+	else if (keycode == 119)
+		--y;
+	else if (keycode == 100)
+		++x;
+	else if (keycode == 97)
+		--x;
+	else if (keycode == 115)
+		++y;
+	mlx_clear_window(wnd->mlxptr, wnd->wndptr);
+	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, x, y);
+	return (1);
+}
+
+int mouse_press(int button, int x, int y, t_wnd *wnd)
+{
+	if (wnd && button && x && y)
+		return (1);
+	return (1);
+}
+
+int mouse_release(int button, int x, int y, t_wnd *wnd)
+{
+	if (wnd && button && x && y)
+		return (1);
+	return (1);
+}
+
+int mouse_move(int x, int y, t_wnd *wnd)
+{
+	if (x && y && wnd)
+		return (1);
+	return (1);
+}
+
+int main(int argc, const char **argv)
+{
+	t_wnd	wnd;
+
+	if (argc != 2)
 	{
-		printf("%2d  ", i);
-		for (int j = 0; j < cols; ++j)
-			printf("%3c", map[i][j]);
-		printf("\n");
+		usage();
+		return (0);
 	}
-}
+	wnd.map = get_map(argv[1]);
+	wnd = wnd_init();
 
-void Brez(char **map, int x1, int y1, int x2, int y2)
-{
-	int dx = x2 - x1 > 0 ? 1 : -1;
-	int dy = y2 - y1 > 0 ? 1 : -1;
-	int lenX = abs(x2 - x1);
-	int lenY = abs(y2 - y1);
-	int iters = max(lenX, lenY) + 1;
-
-	if (lenX > lenY)
-	{
-		int d = -lenX;
-		while (iters--)
-		{
-			map[x1][y1] = '#';
-			x1 += dx;
-			d += 2 * lenY;
-			if (d > 0)
-			{
-				d -= 2 * lenY;
-				y1 += dy;
-			}
-		}
-	}
-	else
-	{
-		int d = -lenY;
-		while (iters--)
-		{
-			map[x1][y1] = '#';
-			y1 += dy;
-			d += 2 * lenX;
-			if (d > 0)
-			{
-				d -= 2 * lenY;
-				x1 += dx;
-			}
-		}
-	}
-}
-
-int main(void)
-{
-	char **map;
-
-	map = (char**)malloc(sizeof(char*) * rows);
-	map[0] = (char*)malloc(rows * (cols + 1));
-	for (size_t i = 1; i < rows; ++i)
-		map[i] = map[i - 1] + cols + 1;
-
-	clear_map(map);
-	Brez(map, 1, 1, 10, 15);
-	print_map(map);
-	getchar();
-
-	clear_map(map);
-	Brez(map, 10, 15, 1, 1);
-	print_map(map);
-	getchar();
-
-	clear_map(map);
-	Brez(map, 1, 15, 10, 1);
-	print_map(map);
-	getchar();
-
-	clear_map(map);
-	Brez(map, 10, 1, 1, 15);
-	print_map(map);
+	map_init(&wnd);
 
 
 
+	mlx_hook(wnd.wndptr, 2, 1L << 0, key_press, &wnd);
+	mlx_hook(wnd.wndptr, 4, 1L << 2, mouse_press, &wnd);
+	mlx_hook(wnd.wndptr, 6, 1L << 13, mouse_move, &wnd);
+	mlx_loop(wnd.mlxptr);
 
+	vec_clear(&wnd.map);
 
-	free(map[0]);
-	free(map);
 	return (0);
 }
