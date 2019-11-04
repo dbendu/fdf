@@ -4,7 +4,7 @@ CC = clang
 
 FLAGS = -Wall -Wextra -Werror -g
 
-FLAGS2 = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/
+FLAGS2 = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/ -lm
 
 SRC = main.c input.c draw_line.c #mlxkeys.c makemap.c draweverything.c draweverything2.c draweverything3.c getinfo.c
 

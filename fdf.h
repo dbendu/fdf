@@ -1,8 +1,10 @@
+#include <math.h>
+
 #include "libft/includes/libft.h"
 #include "minilibx/mlx.h"
 
-#define W	700
-#define H	500
+#define W	1200
+#define H	1100
 
 #define __white	16777215
 
@@ -25,6 +27,8 @@ typedef struct	s_wnd
 	int		bytes_per_pixel;
 	int		size_line;
 	int		endian;
+
+	// double	x_angle;
 }				t_wnd;
 
 void draw_line(t_wnd *wnd, const t_point *a, const t_point *b);

@@ -13,7 +13,7 @@ void Brez1(t_wnd *wnd, t_point a, t_point b)
 	d = -lenY;
 	while (iters--)
 	{
-		*(int*)(wnd->img + a.x * wnd->size_line + b.x * wnd->bytes_per_pixel) = __white;
+		*(int*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes_per_pixel) = __white;
 		a.y += dy;
 		d += 2 * lenX;
 		if (d > 0)
@@ -37,7 +37,7 @@ void Brez2(t_wnd *wnd, t_point a, t_point b)
 	d = -lenX;
 	while (iters--)
 	{
-		*(int*)(wnd->img + a.x * wnd->size_line + b.x * wnd->bytes_per_pixel) = __white;
+		*(int*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes_per_pixel) = __white;
 		a.x += dx;
 		d += 2 * lenY;
 		if (d > 0)
