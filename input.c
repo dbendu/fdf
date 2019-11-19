@@ -71,6 +71,8 @@ void parse_str(t_point ***map, const char *str)
 		if (!*str)
 			break;
 		point.z = ft_atoi(str);
+		if (*str == '-')
+			++str;
 		while (ft_isdigit(*str))
 			++str;
 		point.color = __white;		// white (?)
@@ -103,20 +105,20 @@ t_point **get_map(const char *file)
 		else
 		{
 			vec_clear(&map);
-			error(2, "Invalid map", 0);
+			error(2, "Invalid map", NULL, 0);
 		}
 		if (rows && vec_size(map[rows]) != vec_size(map[rows - 1]))
 		{
 			vec_clear(&map);
-			error(2, "Invalid map", 0);
+			error(2, "Invalid map", NULL, 0);
 		}
 		++rows;
-		free(str);
+		ft_free(str);
 	}
 	if (!map || !vec_size(map[0]))
 	{
 		vec_clear(&map);
-		error(1, "Empty map", 0);
+		error(1, "Empty map", NULL, 0);
 	}
 	return (map);
 }

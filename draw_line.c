@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-void Brez1(t_wnd *wnd, t_point a, t_point b)
+void Brez1(t_wnd *wnd, t_point a, t_point b, uint32_t color)
 {
 	const int	dx = b.x - a.x > 0 ? 1 : -1;
 	const int	dy = b.y - a.y > 0 ? 1 : -1;
@@ -13,7 +13,7 @@ void Brez1(t_wnd *wnd, t_point a, t_point b)
 	d = -lenY;
 	while (iters--)
 	{
-		*(int*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes_per_pixel) = __white;
+		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
 		a.y += dy;
 		d += 2 * lenX;
 		if (d > 0)
@@ -24,7 +24,7 @@ void Brez1(t_wnd *wnd, t_point a, t_point b)
 	}
 }
 
-void Brez2(t_wnd *wnd, t_point a, t_point b)
+void Brez2(t_wnd *wnd, t_point a, t_point b, uint32_t color)
 {
 	const int	dx = b.x - a.x > 0 ? 1 : -1;
 	const int	dy = b.y - a.y > 0 ? 1 : -1;
@@ -37,7 +37,7 @@ void Brez2(t_wnd *wnd, t_point a, t_point b)
 	d = -lenX;
 	while (iters--)
 	{
-		*(int*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes_per_pixel) = __white;
+		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
 		a.x += dx;
 		d += 2 * lenY;
 		if (d > 0)
@@ -48,7 +48,7 @@ void Brez2(t_wnd *wnd, t_point a, t_point b)
 	}
 }
 
-void draw_line(t_wnd *wnd, const t_point *a, const t_point *b)
+void draw_line(t_wnd *wnd, const t_point *a, const t_point *b, uint32_t color)
 {
 	int lenX;
 	int lenY;
@@ -56,8 +56,8 @@ void draw_line(t_wnd *wnd, const t_point *a, const t_point *b)
 	lenX = ft_abs(b->x - a->x);
 	lenY = ft_abs(b->y - a->y);
 	if (lenX > lenY)
-		Brez2(wnd, *a, *b);
+		Brez2(wnd, *a, *b, color);
 	else
-		Brez1(wnd, *a, *b);
+		Brez1(wnd, *a, *b, color);
 	return ;
 }
