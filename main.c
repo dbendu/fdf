@@ -1,46 +1,44 @@
 #include <math.h>
 
 #include "fdf.h"
-#include "minilibx/mlx.h"
 
 void usage(void)
 {
-
+	printf("One file: ./fdf map\n");
+	ft_exit(0);
 }
 
-void	setup_map(t_point **map, unsigned cell)
+void maps_setup(t_wnd *wnd)
 {
-	for (size_t y = 0; y < vec_rows(map); ++y)
+	for (size_t y = 0; y < vec_rows(wnd->map); ++y)
 	{
-		for (size_t x = 0; x < vec_size(map[0]); ++x)
+		for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
 		{
-			map[y][x].x = 100 + x * cell;
-			map[y][x].y = 10 + y * cell;
+			wnd->map[y][x].x = wnd->cell + wnd->x_offset + x * wnd->cell;
+			wnd->map[y][x].y = wnd->cell + wnd->y_offset + y * wnd->cell;
+			wnd->map_cp[y][x].x = wnd->map[y][x].x;
+			wnd->map_cp[y][x].y = wnd->map[y][x].y;
 		}
 	}
 }
 
-t_wnd wnd_init(const char *file)
+void print_map(t_wnd *wnd)
 {
-	t_wnd wnd;
-
-	wnd.mlxptr = mlx_init();
-	wnd.wndptr = mlx_new_window(wnd.mlxptr, W, H, "fdf");
-	wnd.imgptr = mlx_new_image(wnd.mlxptr, W, H);
-	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes,
-								&wnd.size_line, &wnd.endian);
-	wnd.bytes /= 8;
-	wnd.map = get_map(file);
-	wnd.map_cp = vec_cp(wnd.map);
-	wnd.cell = 10;
-	wnd.x_offset = 0;
-	wnd.y_offset = 0;
-	setup_map(wnd.map, wnd.cell);
-	wnd.x_angle = 30.0 * 3.14 / 180;
-	return (wnd);
+	ft_memset(wnd->img, 0, wnd->size_line * HEIGHT);
+	for (size_t y = 0; y < vec_rows(wnd->map_cp); ++y)
+	{
+		for (size_t x = 0; x < vec_size(wnd->map_cp[0]); ++x)
+		{
+			if (x != vec_size(wnd->map_cp[0]) - 1)
+				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1], wnd->map[y][x].z || wnd->map[y][x + 1].z ? __purple : __white);
+			if (y != vec_rows(wnd->map_cp) - 1)
+				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x], wnd->map[y][x].z || wnd->map[y + 1][x].z ? __purple :  __white);
+		}
+	}
+	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
 }
 
-void change_map(t_wnd *wnd, int flag)
+void change_angle(t_wnd *wnd, int flag)
 {
 	if (flag == 1)		// x transform
 	{
@@ -48,8 +46,13 @@ void change_map(t_wnd *wnd, int flag)
 		{
 			for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
 			{
+				wnd->map[y][x].x -= wnd->x_center;
+				wnd->map[y][x].y -= wnd->y_center;
 				wnd->map_cp[y][x].y = wnd->map[y][x].y * cos(wnd->x_angle) + wnd->map[y][x].z * sin(wnd->x_angle);
 				wnd->map_cp[y][x].z = -wnd->map[y][x].y * sin(wnd->x_angle) + wnd->map[y][x].z * cos(wnd->x_angle);
+				wnd->map[y][x].x += wnd->x_center;
+				wnd->map[y][x].y += wnd->y_center;
+				wnd->map_cp[y][x].y += wnd->y_center;
 			}
 		}
 	}
@@ -60,8 +63,13 @@ void change_map(t_wnd *wnd, int flag)
 		{
 			for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
 			{
+				wnd->map[y][x].x -= wnd->x_center;
+				wnd->map[y][x].y -= wnd->y_center;
 				wnd->map_cp[y][x].x = wnd->map[y][x].x * cos(wnd->y_angle) + wnd->map[y][x].z * sin(wnd->y_angle);
 				wnd->map_cp[y][x].z = -wnd->map[y][x].x * sin(wnd->y_angle) + wnd->map[y][x].z * cos(wnd->y_angle);
+				wnd->map[y][x].x += wnd->x_center;
+				wnd->map[y][x].y += wnd->y_center;
+				wnd->map_cp[y][x].x += wnd->x_center;
 			}
 		}
 	}
@@ -72,112 +80,140 @@ void change_map(t_wnd *wnd, int flag)
 		{
 			for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
 			{
+				wnd->map[y][x].x -= wnd->x_center;
+				wnd->map[y][x].y -= wnd->y_center;
 				wnd->map_cp[y][x].x = wnd->map[y][x].x * cos(wnd->z_angle) - wnd->map[y][x].y * sin(wnd->z_angle);
 				wnd->map_cp[y][x].y = -wnd->map[y][x].x * sin(wnd->z_angle) + wnd->map[y][x].y * cos(wnd->z_angle);
+				wnd->map_cp[y][x].x += wnd->x_center;
+				wnd->map_cp[y][x].y += wnd->y_center;
+				wnd->map[y][x].x += wnd->x_center;
+				wnd->map[y][x].y += wnd->y_center;
 			}
 		}
 	}
 }
 
-void map_print(t_wnd *wnd)
+t_wnd wnd_init(const char **argv)
 {
-	ft_memset(wnd->img, 0, H * wnd->size_line);
-	for (size_t y = 0; y < vec_rows(wnd->map_cp); ++y)
-	{
-		for (size_t x = 0; x < vec_size(wnd->map_cp[0]); ++x)
-		{
-			if (x != vec_size(wnd->map_cp[0]) - 1)
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1], __white);
-			if (y != vec_rows(wnd->map_cp) - 1)
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x], __white);
-		}
-	}
-	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
+	t_wnd wnd;
+
+	wnd.mlxptr = mlx_init();
+	wnd.wndptr = mlx_new_window(wnd.mlxptr, WIDTH, HEIGHT, "fdf");
+	wnd.imgptr = mlx_new_image(wnd.mlxptr, WIDTH, HEIGHT);
+	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes, &wnd.size_line, &wnd.endian);
+	wnd.bytes /= 8;
+	wnd.x_angle = 0;
+	wnd.y_angle = 0;
+	wnd.z_angle = 0;
+	wnd.x_offset = 0;
+	wnd.y_offset = 0;
+	wnd.cell = 10;
+	wnd.map = get_map(argv[1]);
+	wnd.map_cp = vec_cp(wnd.map);
+	wnd.x_center = (wnd.cell + vec_size(wnd.map[0]) * wnd.cell) / 2;
+	wnd.y_center = (wnd.cell + vec_rows(wnd.map) * wnd.cell) / 2;
+	maps_setup(&wnd);
+	return (wnd);
 }
-
-
-void map_init(t_wnd *wnd)
-{
-	for (size_t y = 0; y < vec_rows(wnd->map); ++y)
-	{
-		for (size_t x = 0; x <= vec_size(wnd->map[0]); ++x)
-		{
-			wnd->map_cp[y][x].x = wnd->x_offset + (wnd->map[y][x].x - wnd->map[y][x].y) * cos(wnd->x_angle);
-			wnd->map_cp[y][x].y = wnd->y_offset + -wnd->map[y][x].z + (wnd->map[y][x].x + wnd->map[y][x].y) * sin(wnd->x_angle);
-		}
-	}
-}
-
-
 
 int key_press(int keycode, t_wnd *wnd)
 {
-	if (keycode == 65307)
+	printf("%d\n", keycode);
+	if (keycode == ESC)
 		ft_exit(0);
-	// printf("%d\n", keycode);
-	if (keycode == 97)
-		wnd->x_offset -= 10;
-	else if (keycode == 100)
-		wnd->x_offset += 10;
-	else if (keycode == 119)
+	else if (keycode == MINUS)
+	{
+		--wnd->cell;
+		maps_setup(wnd);
+	}
+	else if (keycode == PLUS)
+	{
+		++wnd->cell;
+		maps_setup(wnd);
+	}
+	else if (keycode == UP)
+	{
+		wnd->y_center -= 10;
 		wnd->y_offset -= 10;
-	else if (keycode == 115)
+		maps_setup(wnd);
+	}
+	else if (keycode == DOWN)
+	{
+		wnd->y_center += 10;
 		wnd->y_offset += 10;
-	else if (keycode == 113)
-	{
-		wnd->cell -= wnd->cell ? 1 : 0;
-		setup_map(wnd->map, wnd->cell);
+		maps_setup(wnd);
 	}
-	else if (keycode == 101)
+	else if (keycode == LEFT)
 	{
-		wnd->cell += 2;
-		setup_map(wnd->map, wnd->cell);
+		wnd->x_center -= 10;
+		wnd->x_offset -= 10;
+		maps_setup(wnd);
 	}
-	map_init(wnd);
-	map_print(wnd);
-	return (1);
-}
-
-int mouse_press(int button, int x, int y, t_wnd *wnd)
-{
-	if (wnd && button && x && y)
-		return (1);
-	return (1);
-}
-
-int mouse_release(int button, int x, int y, t_wnd *wnd)
-{
-	if (wnd && button && x && y)
-		return (1);
-	return (1);
-}
-
-int mouse_move(int x, int y, t_wnd *wnd)
-{
-	if (x && y && wnd)
-		return (1);
+	else if (keycode == RIGHT)
+	{
+		wnd->x_center += 10;
+		wnd->x_offset += 10;
+		maps_setup(wnd);
+	}
+	else if (keycode == W)
+	{
+		wnd->x_angle -= 3.14 / 360 * 3;
+		change_angle(wnd, 1);
+	}
+	else if (keycode == S)
+	{
+		wnd->x_angle += 3.14 / 360 * 3;
+		change_angle(wnd, 1);
+	}
+	else if (keycode == A)
+	{
+		wnd->y_angle -= 3.14 / 360 * 3;
+		change_angle(wnd, 2);
+	}
+	else if (keycode == D)
+	{
+		wnd->y_angle += 3.14 / 360 * 3;
+		change_angle(wnd, 2);
+	}
+	else if (keycode == 32)
+	{
+		wnd->x_angle = 0;
+		wnd->y_angle = 0;
+		change_angle(wnd, 1);
+		change_angle(wnd, 2);
+	}
+	else if (keycode == Q)
+	{
+		wnd->z_angle -= 3.14 / 360 * 3;
+		change_angle(wnd, 3);
+	}
+	else if (keycode == E)
+	{
+		wnd->z_angle += 3.14 / 360 * 3;
+		change_angle(wnd, 3);
+	}
+	print_map(wnd);
 	return (1);
 }
 
 int main(int argc, const char **argv)
 {
-	t_wnd	wnd;
+	t_wnd wnd;
 
 	if (argc != 2)
 	{
 		usage();
 		return (0);
 	}
-	wnd = wnd_init(argv[1]);
-	map_init(&wnd);
-	map_print(&wnd);
 
-
+	wnd = wnd_init(argv);
+	mlx_put_image_to_window(wnd.mlxptr, wnd.wndptr, wnd.imgptr, 0, 0);
 	mlx_hook(wnd.wndptr, 2, 1L << 0, key_press, &wnd);
-	mlx_hook(wnd.wndptr, 4, 1L << 2, mouse_press, &wnd);
-	mlx_hook(wnd.wndptr, 6, 1L << 13, mouse_move, &wnd);
 	mlx_loop(wnd.mlxptr);
 
-	vec_clear(&wnd.map);
+
+
+
+
 	return (0);
 }

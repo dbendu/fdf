@@ -4,10 +4,35 @@
 #include "libft/includes/libft.h"
 #include "minilibx/mlx.h"
 
-#define W	1500
-#define H	1000
+#define WIDTH	1500
+#define HEIGHT	1000
 
-#define __white	16777215
+#define MAX_X	(WIDTH - 1)
+#define MAX_Y	(HEIGHT - 1)
+
+#define ESC		65307
+
+#define MINUS	45
+#define PLUS	61
+
+#define SPACE	32
+
+#define W		119
+#define S		115
+#define A		97
+#define D		100
+
+#define Q		113
+#define E		101
+
+#define UP		65362
+#define DOWN	65364
+#define LEFT	65361
+#define RIGHT	65363
+
+#define __white		16777215
+// #define __purple	16711935
+#define __purple	16711680
 
 typedef struct	s_point
 {
@@ -36,7 +61,12 @@ typedef struct	s_wnd
 
 	int x_offset;
 	int y_offset;
+	int z_offset;
+
+	int x_center;
+	int y_center;
+	int z_center;
 }				t_wnd;
 
-void draw_line(t_wnd *wnd, const t_point *a, const t_point *b, uint32_t color);
+void draw_line(t_wnd *wnd, t_point *a, t_point *b, uint32_t color);
 t_point **get_map(const char *file);
