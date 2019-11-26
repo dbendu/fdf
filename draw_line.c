@@ -13,7 +13,7 @@ void Brez1(t_wnd *wnd, t_point a, t_point b, uint32_t color)
 	d = -lenY;
 	while (iters--)
 	{
-		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
+		*(uint32_t*)(wnd->img + (int)a.y * wnd->size_line + (int)a.x * wnd->bytes) = color;
 		a.y += dy;
 		d += 2 * lenX;
 		if (d > 0)
@@ -37,7 +37,7 @@ void Brez2(t_wnd *wnd, t_point a, t_point b, uint32_t color)
 	d = -lenX;
 	while (iters--)
 	{
-		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
+		*(uint32_t*)(wnd->img + (int)a.y * wnd->size_line + (int)a.x * wnd->bytes) = color;
 		a.x += dx;
 		d += 2 * lenY;
 		if (d > 0)
@@ -48,7 +48,7 @@ void Brez2(t_wnd *wnd, t_point a, t_point b, uint32_t color)
 	}
 }
 
-int code(int x, int y)
+int code(float x, float y)
 {
 	return ((x < 0) << 3 | (x > MAX_X) << 2 | (y < 0) << 1 | (y > MAX_Y));
 }
@@ -58,37 +58,35 @@ void draw_line(t_wnd *wnd, t_point *a, t_point *b, uint32_t color)
 	int lenX;
 	int lenY;
 
-	int code1 = code(a->x, a->y);
-	int code2 = code(b->x, b->y);
 	float dx = b->x - a->x;
 	float dy = b->y - a->y;
-	while (code1 | code2)
+	while (code(a->x, a->y) | code(b->x, b->y))
 	{
-		if (code1 & code2)
+		if (code(a->x, b->x) & code(b->x, b->y))
 			return ;
-		if (code1)
+		if (code(a->x, a->y))
 		{
 			if (a->x < 0)
 			{
 				a->y += dy * (0 - a->x) / dx;
 				a->x = 0;
 			}
-			else if (a->x > 1500)
+			else if (a->x > MAX_X)
 			{
-				a->y += dy * (1500 - a->x) / dx;
-				a->x = 1500;
+				a->y += dy * (MAX_X - a->x) / dx;
+				a->x = MAX_X;
 			}
 			else if (a->y < 0)
 			{
 				a->x += dx * (0 - a->y) / dy;
+				// a->x += (float)a->y / (a->y - b->y) * (b->x - a->x);
 				a->y = 0;
 			}
-			else if (a->y > 1000)
+			else if (a->y > MAX_Y)
 			{
-				a->x += dx * (1000 - a->y) / dy;
-				a->y = 1000;
+				a->x += dx * (MAX_Y - a->y) / dy;
+				a->y = MAX_Y;
 			}
-			code1 = code(a->x, a->y);
 		}
 		else
 		{
@@ -97,24 +95,22 @@ void draw_line(t_wnd *wnd, t_point *a, t_point *b, uint32_t color)
 				b->y += dy * (0 - b->x) / dx;
 				b->x = 0;
 			}
-			else if (b->x > 1500)
+			else if (b->x > MAX_X)
 			{
-				b->y += dy * (1500 - b->x) / dx;
-				b->x = 1500;
+				b->y += dy * (MAX_X - b->x) / dx;
+				b->x = MAX_X;
 			}
 			else if (b->y < 0)
 			{
 				b->x += dx * (0 - b->y) / dy;
 				b->y = 0;
 			}
-			else if (b->y > 1000)
+			else if (b->y > MAX_Y)
 			{
-				b->x += dx * (1000 - b->y) / dy;
-				b->y = 1000;
+				b->x += dx * (MAX_Y - b->y) / dy;
+				b->y = MAX_Y;
 			}
-			code2 = code(b->x, b->y);
 		}
-
 	}
 
 	lenX = ft_abs(b->x - a->x);

@@ -34,12 +34,20 @@
 // #define __purple	16711935
 #define __purple	16711680
 
+// typedef struct	s_point
+// {
+// 	int x;
+// 	int y;
+// 	int z;
+// 	int color;
+// }				t_point;
+
 typedef struct	s_point
 {
-	int x;
-	int y;
-	int z;
-	int color;
+	float x;
+	float y;
+	float z;
+	float color;
 }				t_point;
 
 typedef struct	s_wnd
@@ -54,7 +62,7 @@ typedef struct	s_wnd
 	int		bytes;
 	int		size_line;
 	int		endian;
-	unsigned	cell;
+	int	cell;
 	double	x_angle;
 	double	z_angle;
 	double	y_angle;
@@ -67,6 +75,14 @@ typedef struct	s_wnd
 	int y_center;
 	int z_center;
 }				t_wnd;
+
+typedef struct	s_quaternion
+{
+	double x;
+	double y;
+	double z;
+	double w;
+}				t_quaternion;
 
 void draw_line(t_wnd *wnd, t_point *a, t_point *b, uint32_t color);
 t_point **get_map(const char *file);
