@@ -1,39 +1,39 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/08/13 16:13:26 by lshellie          #+#    #+#              #
+#    Updated: 2019/11/29 21:13:33 by dbendu           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+SRC = main.c draw_line.c input.c
+
+OBJ = main.o draw_line.o input.o
+
 NAME = fdf
 
-CC = clang
+LIB = libft.a
 
-FLAGS = -Wall -Wextra -Werror
-
-FLAGS2 = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/ -I libft/includes/ -lm
-
-GFLAGS = -g -Wall -Wextra -Werror
-
-SRC = main.c input.c draw_line.c
-
-LIBFT_DIR = libft
-LIBS = libft/libft.a
-
-OBJS = $(SRC:.c=.o)
-
-HEADER = fdf.h
+MLX = mlx
 
 all: $(NAME)
 
-g:
-	@$(CC) $(SRC) $(GFLAGS) $(FLAGS2) libft/glibft.a -o fdf
-
-$(LIBS):
-	make -C $(LIBFT_DIR)
-
-$(NAME): $(SRC) $(LIBS)
-	@$(CC) $(SRC) $(FLAGS) $(FLAGS2) $(LIBS) -o fdf
-
+$(NAME): $(OBJ) $(LIB) $(MLX)
+	gcc -Wall -Wextra -Werror -o $(NAME) $(OBJ) -lm -L. libft/$(LIB) -L ./mlx -lmlx -framework OpenGL -framework AppKit
+$(LIB):
+	make -C ./libft
+$(MLX):
+	make -C ./mlx
+%.o: %.c
+	gcc -c $<
 clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean
-	@rm -rf $(OBJS)
-
+	make clean -C ./libft
+	rm -rf $(OBJ)
 fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@rm -f $(NAME)
-
-re: fclean all
+	make fclean -C ./libft
+	rm -rf $(NAME)
+make re: fclean all
