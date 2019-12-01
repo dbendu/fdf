@@ -58,6 +58,9 @@
 # define LEFT	123
 # define RIGHT	124
 
+# define I		105
+# define O		111
+
 #endif
 
 #define MAX_X	(WIDTH - 1)

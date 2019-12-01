@@ -5,7 +5,6 @@ FLAGS = -Wall -Wextra -Werror
 MLXFLAGS_LINUX = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/
 MLXFLAGS_MACOS = -lmlx -L minilibx/ -I minilibx/ -framework OpenGL -framework AppKit
 
-
 SRC = main.c	draw_line.c		input.c
 
 LIBFT = libft/libft.a
@@ -21,7 +20,8 @@ LINUX =		Ubuntu
 
 all: $(NAME)
 
-$(NAME): $(SRC)
+$(NAME):
+all:
 	@make -C libft
 ifeq ($(SYSTEM), $(MACOS))
 	@rm -rf minilibx_linux
