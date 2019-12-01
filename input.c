@@ -1,15 +1,16 @@
 #include "fdf.h"
+#include <stdio.h>
 
-bool is_num(const char *str, const char *str_beg)
+t_bool is_num(const char *str, const char *str_beg)
 {
 	size_t i;
 
 	if (ft_isdigit(*str))
-		return (true);
+		return (TRUE);
 	if ((*str == '+' || *str == '-') &&
 		ft_isdigit(str[1]) &&
 		(str == str_beg || ft_isspace(str[-1])))
-		return (true);
+		return (TRUE);
 	if (*str == ',' && ft_strlen(str) > 3 &&
 		str[1] == '0' && str[2] == 'x')
 	{
@@ -17,15 +18,15 @@ bool is_num(const char *str, const char *str_beg)
 		while (!ft_isspace(str[i]))
 		{
 			if (!ft_ishex(*str))
-				return (false);
+				return (FALSE);
 			++i;
 		}
-		return (true);
+		return (TRUE);
 	}
-	return (false);
+	return (FALSE);
 }
 
-bool is_str_valid(const char *str)
+t_bool is_str_valid(const char *str)
 {
 	const char *iter;
 	__int128_t value;
@@ -38,7 +39,7 @@ bool is_str_valid(const char *str)
 		if (is_num(iter, str))
 		{
 			if ((value = ft_atoi(iter)) > MAX_INT || value < MIN_INT)
-				return (false);
+				return (FALSE);
 			if (*iter == '-' || *iter == '+')
 				++iter;
 			while (ft_isdigit(*iter))
@@ -52,9 +53,9 @@ bool is_str_valid(const char *str)
 			}
 		}
 		else if (*iter)
-			return (false);
+			return (FALSE);
 	}
-	return (true);
+	return (TRUE);
 }
 
 void parse_str(t_point ***map, const char *str)
@@ -105,12 +106,13 @@ t_point **get_map(const char *file)
 		else
 		{
 			vec_clear(&map);
-			error(2, "Invalid map", NULL, 0);
+			error(2, "Invalid map: invalid str", NULL, 0);
 		}
+		printf("%d: %zu\n", rows, vec_size(map[rows]));
 		if (rows && vec_size(map[rows]) != vec_size(map[rows - 1]))
 		{
 			vec_clear(&map);
-			error(2, "Invalid map", NULL, 0);
+			error(2, "Invalid map: lenght", NULL, 0);
 		}
 		++rows;
 		ft_free(str);
