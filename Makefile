@@ -1,34 +1,60 @@
 NAME = fdf
 
-CC = clang
-
 FLAGS = -Wall -Wextra -Werror
 
-FLAGS2 = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/ -lm -g
+MLXFLAGS_LINUX = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/
+MLXFLAGS_MACOS = -lmlx -L minilibx/ -I minilibx/ -framework OpenGL -framework AppKit
 
-SRC = main.c draw_line.c input.c #mlxkeys.c makemap.c draweverything.c draweverything2.c draweverything3.c getinfo.c
 
-LIBFT_DIR = libft
-LIBS = libft/libft.a
+SRC = main.c	draw_line.c		input.c
+
+LIBFT = libft/libft.a
 
 OBJS = $(SRC:.c=.o)
 
 HEADER = fdf.h
 
+SYSTEM =	$(shell uname)
+
+MACOS =		Darwin
+LINUX =		Ubuntu
+
 all: $(NAME)
 
-$(LIBS):
-	make -C $(LIBFT_DIR)
-
-$(NAME): $(SRC) $(LIBS)
-	$(CC) $(SRC) $(FLAGS) $(FLAGS2) $(LIBS) -o fdf
+$(NAME): $(SRC)
+	@make -C libft
+ifeq ($(SYSTEM), $(MACOS))
+	@rm -rf minilibx_linux
+	@-mv -f minilibx_macos minilibx
+	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o fdf
+else ifeq ($(SYSTEM), $(LINUX))
+	@rm -rf minilibx_macos
+	@-mv -f minilibx_linux minilibx
+	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o fdf
+endif
 
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -rf $(OBJS)
+	@make clean -C libft
+	@rm -rf $(OBJS)
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -f $(NAME)
+	@make fclean -C libft
+	@rm -f $(NAME)
 
 re: fclean all
+
+c: clean
+
+f: fclean
+
+g:
+	@make g -C libft
+ifeq ($(SYSTEM), $(MACOS))
+	@rm -rf minilibx_linux
+	@-mv -f minilibx_macos minilibx
+	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o fdf
+else ifeq ($(SYSTEM), $(LINUX))
+	@rm -rf minilibx_macos
+	@-mv -f minilibx_linux minilibx
+	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o fdf
+endif
