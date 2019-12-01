@@ -1,6 +1,6 @@
 NAME = fdf
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -lm
 
 MLXFLAGS_LINUX = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/
 MLXFLAGS_MACOS = -lmlx -L minilibx/ -I minilibx/ -framework OpenGL -framework AppKit

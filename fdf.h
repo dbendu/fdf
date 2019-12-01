@@ -67,7 +67,7 @@
 #define MAX_Y	(HEIGHT - 1)
 
 #define __white		16777215
-#define __purple	16711680
+#define __red		16711680
 
 typedef struct	s_point
 {
@@ -105,5 +105,5 @@ typedef struct	s_wnd
 	int z_center;
 }				t_wnd;
 
-void draw_line(t_wnd *wnd, t_point *a, t_point *b, uint32_t color);
+void draw_line(t_wnd *wnd, t_point *a, t_point *b);
 t_point **get_map(const char *file);

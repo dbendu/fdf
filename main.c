@@ -17,10 +17,17 @@ void print_map(t_wnd *wnd)
 	{
 		for (size_t x = 0; x < vec_size(wnd->map_cp[0]); ++x)
 		{
+			wnd->map_cp[y][x].color = wnd->map[y][x].color;
 			if (x != vec_size(wnd->map_cp[0]) - 1)
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1], wnd->map[y][x].z || wnd->map[y][x + 1].z ? __purple : __white);
+			{
+				wnd->map_cp[y][x + 1].color = wnd->map[y][x + 1].color;
+				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1]);
+			}
 			if (y != vec_rows(wnd->map_cp) - 1)
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x], wnd->map[y][x].z || wnd->map[y + 1][x].z ? __purple :  __white);
+			{
+				wnd->map_cp[y + 1][x].color = wnd->map_cp[y + 1][x].color;
+				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x]);
+			}
 		}
 	}
 	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
@@ -81,10 +88,16 @@ t_wnd wnd_init(const char **argv)
 	wnd.z_angle = 0;
 	wnd.x_offset = 300;
 	wnd.y_offset = 300;
-	wnd.cell = 1;
+	wnd.cell = 40;
 	wnd.z_shift = 0;
 	wnd.map = get_map(argv[1]);
 	wnd.map_cp = vec_cp(wnd.map);
+	for (size_t y = 0; y < vec_rows(wnd.map); ++y)
+	{
+		for (size_t x = 0; x < vec_size(wnd.map[0]); ++x)
+			printf("%8d\t", wnd.map[y][x].color);
+		printf("\n");
+	}
 	wnd.x_center = (wnd.cell + vec_size(wnd.map[0]) * wnd.cell) / 2;
 	wnd.y_center = (wnd.cell + vec_rows(wnd.map) * wnd.cell) / 2;
 	change_angle(&wnd);
