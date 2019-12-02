@@ -1,5 +1,4 @@
 #include "fdf.h"
-#include <stdio.h>
 
 t_bool is_num(const char *str, const char *str_beg)
 {
@@ -113,7 +112,6 @@ t_point **get_map(const char *file)
 			vec_clear(&map);
 			error(2, "Invalid map: invalid str", NULL, 0);
 		}
-		printf("%d: %zu\n", rows, vec_size(map[rows]));
 		if (rows && vec_size(map[rows]) != vec_size(map[rows - 1]))
 		{
 			vec_clear(&map);

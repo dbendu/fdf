@@ -61,6 +61,12 @@
 # define I		34
 # define O		31
 
+# define SHIFT	257
+# define CTRL	256
+
+# define WHEEL_UP	5
+# define WHEEL_DOWN	4
+
 #endif
 
 #define MAX_X	(WIDTH - 1)
@@ -105,6 +111,11 @@ typedef struct	s_wnd
 	int x_center;
 	int y_center;
 	int z_center;
+
+	t_bool	is_mouse_active;
+	int		mouse_x;
+	int		mouse_y;
+
 }				t_wnd;
 
 void draw_line(t_wnd *wnd, t_point *a, t_point *b);
