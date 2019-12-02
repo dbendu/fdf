@@ -116,7 +116,18 @@ typedef struct	s_wnd
 	int		mouse_x;
 	int		mouse_y;
 
+	size_t rows;
+	size_t cols;
+
+	double sin_x;
+	double sin_y;
+	double sin_z;
+	double cos_x;
+	double cos_z;
+	double cos_y;
+
 }				t_wnd;
 
-void draw_line(t_wnd *wnd, t_point *a, t_point *b);
-t_point **get_map(const char *file);
+void		draw_line(t_wnd *wnd, t_point *a, t_point *b);
+t_point		**get_map(const char *file);
+void		print_map(t_wnd *wnd);

@@ -5,126 +5,50 @@
 
 #include "fdf.h"
 
-// void usage(void)
-// {
-// 	printf("One file: ./fdf map\n");
-// 	ft_exit(0);
-// }
-
-void print_map(t_wnd *wnd)
+void usage(void)
 {
-	ft_memset(wnd->img, 0, wnd->size_line * HEIGHT);
-	for (size_t y = 0; y < vec_rows(wnd->map_cp); ++y)
-	{
-		for (size_t x = 0; x < vec_size(wnd->map_cp[0]); ++x)
-		{
-			wnd->map_cp[y][x].a_color = wnd->map[y][x].a_color;
-			wnd->map_cp[y][x].g_color = wnd->map[y][x].g_color;
-			wnd->map_cp[y][x].b_color = wnd->map[y][x].b_color;
-			if (x != vec_size(wnd->map_cp[0]) - 1)
-			{
-				wnd->map_cp[y][x + 1].a_color = wnd->map[y][x + 1].a_color;
-				wnd->map_cp[y][x + 1].g_color = wnd->map[y][x + 1].g_color;
-				wnd->map_cp[y][x + 1].b_color = wnd->map[y][x + 1].b_color;
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1]);
-			}
-			if (y != vec_rows(wnd->map_cp) - 1)
-			{
-				wnd->map_cp[y + 1][x].a_color = wnd->map_cp[y + 1][x].a_color;
-				wnd->map_cp[y + 1][x].g_color = wnd->map_cp[y + 1][x].g_color;
-				wnd->map_cp[y + 1][x].b_color = wnd->map_cp[y + 1][x].b_color;
-				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x]);
-			}
-		}
-	}
-	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
+	printf("One file: ./fdf map\n");
+	ft_exit(0);
 }
 
 void change_angle(t_wnd *wnd)
 {
-	double sin_x = sin(wnd->x_angle);
-	double sin_y = sin(wnd->y_angle);
-	double sin_z = sin(wnd->z_angle);
-	double cos_x = cos(wnd->x_angle);
-	double cos_z = cos(wnd->z_angle);
-	double cos_y = cos(wnd->y_angle);
-	wnd->x_center = wnd->cell * vec_size(wnd->map[0]) / 2;// + wnd->x_offset;
-	wnd->y_center = wnd->cell * vec_rows(wnd->map) / 2;
-		for (size_t y = 0; y < vec_rows(wnd->map); ++y)
+	int x_;
+	int y_;
+	int z_;
+
+	wnd->sin_x = sin(wnd->x_angle);
+	wnd->sin_y = sin(wnd->y_angle);
+	wnd->sin_z = sin(wnd->z_angle);
+	wnd->cos_x = cos(wnd->x_angle);
+	wnd->cos_z = cos(wnd->z_angle);
+	wnd->cos_y = cos(wnd->y_angle);
+	for (size_t y = 0; y < wnd->rows; ++y)
+		for (size_t x = 0; x < wnd->cols; ++x)
 		{
-			for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
-			{
-				wnd->map_cp[y][x].x = x * wnd->cell - wnd->x_center;
-				wnd->map_cp[y][x].y = y * wnd->cell - wnd->y_center;
-				int x_ = wnd->map_cp[y][x].x;
-				int y_ = wnd->map_cp[y][x].y;
-				int z_ = wnd->map[y][x].z;
-				if (z_ && z_ > 0)
-					z_ += wnd->z_shift;
-				else if (z_ && z_ < 0)
-					z_ -= wnd->z_shift;
-				wnd->map_cp[y][x].y = y_ * cos_x + z_ * sin_x;
-				wnd->map_cp[y][x].z = -y_ * sin_x + z_ * cos_x;
-
-				x_ = wnd->map_cp[y][x].x;
-				y_ = wnd->map_cp[y][x].y;
-				z_ = wnd->map_cp[y][x].z;
-				wnd->map_cp[y][x].x = x_ * cos_y + z_ * sin_y;
-				wnd->map_cp[y][x].z = -x_ * sin_y + z_ * cos_y;
-
-				x_ = wnd->map_cp[y][x].x;
-				y_ = wnd->map_cp[y][x].y;
-				z_ = wnd->map_cp[y][x].z;
-				wnd->map_cp[y][x].x = x_ * cos_z - y_ * sin_z;
-				wnd->map_cp[y][x].y = x_ * sin_z + y_ * cos_z;
-
-
-				wnd->map_cp[y][x].x += wnd->x_offset;
-				wnd->map_cp[y][x].y += wnd->y_offset;
-			}
-		}
-}
-
-void mouse_change_angle(t_wnd *wnd)
-{
-	double sin_x = sin(wnd->x_angle);
-	double sin_y = sin(wnd->y_angle);
-	double sin_z = sin(wnd->z_angle);
-	double cos_x = cos(wnd->x_angle);
-	double cos_z = cos(wnd->z_angle);
-	double cos_y = cos(wnd->y_angle);
-		for (size_t y = 0; y < vec_rows(wnd->map); ++y)
-		{
-			for (size_t x = 0; x < vec_size(wnd->map[0]); ++x)
-			{
-				wnd->map_cp[y][x].x = x * wnd->cell - wnd->mouse_x;
-				wnd->map_cp[y][x].y = y * wnd->cell - wnd->mouse_y;
-				int x_ = wnd->map_cp[y][x].x;
-				int y_ = wnd->map_cp[y][x].y;
-				int z_ = wnd->map[y][x].z;
-				if (z_ && z_ > 0)
-					z_ += wnd->z_shift;
-				else if (z_ && z_ < 0)
-					z_ -= wnd->z_shift;
-				wnd->map_cp[y][x].y = y_ * cos_x + z_ * sin_x;
-				wnd->map_cp[y][x].z = -y_ * sin_x + z_ * cos_x;
-
-				x_ = wnd->map_cp[y][x].x;
-				y_ = wnd->map_cp[y][x].y;
-				z_ = wnd->map_cp[y][x].z;
-				wnd->map_cp[y][x].x = x_ * cos_y + z_ * sin_y;
-				wnd->map_cp[y][x].z = -x_ * sin_y + z_ * cos_y;
-
-				x_ = wnd->map_cp[y][x].x;
-				y_ = wnd->map_cp[y][x].y;
-				z_ = wnd->map_cp[y][x].z;
-				wnd->map_cp[y][x].x = x_ * cos_z - y_ * sin_z;
-				wnd->map_cp[y][x].y = x_ * sin_z + y_ * cos_z;
-
-
-				wnd->map_cp[y][x].x += wnd->mouse_x;
-				wnd->map_cp[y][x].y += wnd->mouse_y;
-			}
+			wnd->map_cp[y][x].x = x * wnd->cell - wnd->cols * wnd->cell / 2;
+			wnd->map_cp[y][x].y = y * wnd->cell - wnd->rows * wnd->cell / 2;
+			x_ = wnd->map_cp[y][x].x;
+			y_ = wnd->map_cp[y][x].y;
+			z_ = wnd->map[y][x].z;
+			if (z_ && z_ > 0)
+				z_ += wnd->z_shift;
+			else if (z_ && z_ < 0)
+				z_ -= wnd->z_shift;
+			wnd->map_cp[y][x].y = y_ * wnd->cos_x + z_ * wnd->sin_x;
+			wnd->map_cp[y][x].z = -y_ * wnd->sin_x + z_ * wnd->cos_x;
+			x_ = wnd->map_cp[y][x].x;
+			y_ = wnd->map_cp[y][x].y;
+			z_ = wnd->map_cp[y][x].z;
+			wnd->map_cp[y][x].x = x_ * wnd->cos_y + z_ * wnd->sin_y;
+			wnd->map_cp[y][x].z = -x_ * wnd->sin_y + z_ * wnd->cos_y;
+			x_ = wnd->map_cp[y][x].x;
+			y_ = wnd->map_cp[y][x].y;
+			z_ = wnd->map_cp[y][x].z;
+			wnd->map_cp[y][x].x = x_ * wnd->cos_z - y_ * wnd->sin_z;
+			wnd->map_cp[y][x].y = x_ * wnd->sin_z + y_ * wnd->cos_z;
+			wnd->map_cp[y][x].x += wnd->x_offset;
+			wnd->map_cp[y][x].y += wnd->y_offset;
 		}
 }
 
@@ -140,17 +64,19 @@ t_wnd wnd_init(const char **argv)
 	wnd.x_angle = 0;
 	wnd.y_angle = 0;
 	wnd.z_angle = 0;
-	wnd.cell = 1;
+	wnd.cell = 50;
 	wnd.z_shift = 0;
 	wnd.is_mouse_active = 0;
 	wnd.map = get_map(argv[1]);
 	wnd.mouse_x = 0;
 	wnd.mouse_y = 0;
 	wnd.map_cp = vec_cp(wnd.map);
-	wnd.x_center = (wnd.cell + vec_size(wnd.map[0]) * wnd.cell) / 2;
-	wnd.y_center = (wnd.cell + vec_rows(wnd.map) * wnd.cell) / 2;
-	wnd.x_offset = wnd.x_center;
-	wnd.y_offset = wnd.y_center;
+	wnd.rows = vec_rows(wnd.map);
+	wnd.cols = vec_size(wnd.map[0]);
+	wnd.x_center = 0;
+	wnd.y_center = 0;
+	wnd.x_offset = WIDTH / 2 - vec_size(wnd.map[0]) * wnd.cell / 2;
+	wnd.y_offset = HEIGHT / 2 - vec_rows(wnd.map) * wnd.cell / 2;
 	change_angle(&wnd);
 	print_map(&wnd);
 	return (wnd);
@@ -225,8 +151,8 @@ int key_press(int keycode, t_wnd *wnd)
 		wnd->x_offset = 0;
 		wnd->y_offset = 0;
 		wnd->z_shift = 0;
-		wnd->x_center = (wnd->cell + vec_size(wnd->map[0]) * wnd->cell) / 2;
-		wnd->y_center = (wnd->cell + vec_rows(wnd->map) * wnd->cell) / 2;
+		wnd->x_center = wnd->cell + (vec_size(wnd->map[0]) * wnd->cell) / 2;
+		wnd->y_center = wnd->cell + (vec_rows(wnd->map) * wnd->cell) / 2;
 	}
 	if (keycode != UP && keycode != DOWN && keycode != LEFT && keycode != RIGHT)
 		change_angle(wnd);
@@ -245,18 +171,14 @@ int mouse_press(int button, int x, int y, t_wnd *wnd)
 	else if (button == WHEEL_UP)
 	{
 		++wnd->cell;
-		wnd->mouse_x = x;
-		wnd->mouse_y = y;
-		mouse_change_angle(wnd);
+		change_angle(wnd);
 		print_map(wnd);
 		return 1;
 	}
 	else if (button == WHEEL_DOWN && wnd->cell)
 	{
 		--wnd->cell;
-		wnd->mouse_x = x;
-		wnd->mouse_y = y;
-		mouse_change_angle(wnd);
+		change_angle(wnd);
 		print_map(wnd);
 		return 1;
 	}
@@ -295,7 +217,7 @@ int main(int argc, const char **argv)
 
 	if (argc != 2)
 	{
-		// usage();
+		usage();
 		return (0);
 	}
 

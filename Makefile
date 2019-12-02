@@ -5,7 +5,7 @@ FLAGS = -Wall -Wextra -Werror -lm
 MLXFLAGS_LINUX = -lmlx -lXext -lX11 -L minilibx/ -I minilibx/
 MLXFLAGS_MACOS = -lmlx -L minilibx/ -I minilibx/ -framework OpenGL -framework AppKit
 
-SRC = main.c	draw_line.c		input.c
+SRC = main.c	draw_line.c		input.c		print_map.c
 
 LIBFT = libft/libft.a
 
