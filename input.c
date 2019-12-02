@@ -76,11 +76,16 @@ void parse_str(t_point ***map, const char *str)
 			++str;
 		while (ft_isdigit(*str))
 			++str;
-		point.color = __white;		// white (?)
+		point.a_color = 255;
+		point.g_color = 255;
+		point.b_color = 255;
 		if (*str == ',')
 		{
 			str += 3;
-			point.color = hex_to_dec(str);
+			int color = hex_to_dec(str);
+			point.a_color = (color >> 16) & 255;
+			point.g_color = (color >> 8) & 255;
+			point.b_color = color & 255;
 			while (ft_ishex(*str))
 				++str;
 		}

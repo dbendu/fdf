@@ -74,7 +74,9 @@ typedef struct	s_point
 	int x;
 	int y;
 	int z;
-	 color;
+	float a_color;
+	float g_color;
+	float b_color;
 }				t_point;
 
 typedef struct	s_wnd

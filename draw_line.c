@@ -15,27 +15,25 @@ void Brez1(t_wnd *wnd, t_point a, t_point b)
 	int			d;
 
 	double gip = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
-	double r_d = abs((((a.color >> 16) & 255) - ((b.color >> 16) & 255))) / gip;
-	double g_d = abs((((a.color >> 8) & 255) - ((b.color >> 8) & 255))) / gip;
-	double b_d = abs(((a.color & 255) - (b.color & 255))) / gip;
-	if (((a.color >> 16) & 255) > ((b.color >> 16) & 255))
+	double r_d = fabsf(a.a_color - b.a_color) / gip;
+	double g_d = fabsf(a.g_color - b.g_color) / gip;
+	double b_d = fabsf(a.b_color - b.b_color) / gip;
+	if (a.a_color > b.a_color)
 		r_d = -r_d;
-	if (((a.color >> 8) & 255) > ((b.color >> 8) & 255))
+	if (a.g_color > b.g_color)
 		g_d = -g_d;
-	if ((a.color & 255) > (b.color & 255))
+	if (a.b_color > b.b_color)
 		b_d = -b_d;
 
 	iters = ft_max(lenX, lenY) + 1;
 	d = -lenY;
 	while (iters--)
 	{
-		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = a.color;
-		// a.color += (int)r_d << 16;
-		// a.color += (int)g_d << 8;
-		// a.color += (int)b_d;
-		a.color += FLOAT_TO_INT(r_d) << 16;
-		a.color += FLOAT_TO_INT(g_d) << 8;
-		a.color += FLOAT_TO_INT(b_d);
+		int color = ((int)a.a_color << 16) + ((int)a.g_color << 8) + a.b_color;
+		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
+		a.a_color += r_d;
+		a.g_color += g_d;
+		a.b_color += b_d;
 		a.y += dy;
 		d += 2 * lenX;
 		if (d > 0)
@@ -56,24 +54,25 @@ void Brez2(t_wnd *wnd, t_point a, t_point b)
 	int			d;
 
 	double gip = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
-	double r_d = abs((((a.color >> 16) & 255) - ((b.color >> 16) & 255))) / gip;
-	double g_d = abs((((a.color >> 8) & 255) - ((b.color >> 8) & 255))) / gip;
-	double b_d = abs(((a.color & 255) - (b.color & 255))) / gip;
-	if (((a.color >> 16) & 255) > ((b.color >> 16) & 255))
+	double r_d = fabsf(a.a_color - b.a_color) / gip;
+	double g_d = fabsf(a.g_color - b.g_color) / gip;
+	double b_d = fabsf(a.b_color - b.b_color) / gip;
+	if (a.a_color > b.a_color)
 		r_d = -r_d;
-	if (((a.color >> 8) & 255) > ((b.color >> 8) & 255))
+	if (a.g_color > b.g_color)
 		g_d = -g_d;
-	if ((a.color & 255) > (b.color & 255))
+	if (a.b_color > b.b_color)
 		b_d = -b_d;
 
 	iters = ft_max(lenX, lenY) + 1;
 	d = -lenX;
 	while (iters--)
 	{
-		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = a.color;
-		a.color += FLOAT_TO_INT(r_d) << 16;
-		a.color += FLOAT_TO_INT(g_d) << 8;
-		a.color += FLOAT_TO_INT(b_d);
+		int color = ((int)a.a_color << 16) + ((int)a.g_color << 8) + a.b_color;
+		*(uint32_t*)(wnd->img + a.y * wnd->size_line + a.x * wnd->bytes) = color;
+		a.a_color += r_d;
+		a.g_color += g_d;
+		a.b_color += b_d;
 		// a.color += (int)r_d << 16;
 		// a.color += (int)g_d << 8;
 		// a.color += (int)b_d;
@@ -156,6 +155,9 @@ void draw_line(t_wnd *wnd, t_point *a, t_point *b)
 	// 	}
 
 	// }
+	if (a->x < 0 || b->x < 0 || a->x > MAX_X || b->x > MAX_X ||
+		a->y < 0 || b->y < 0 || a->y > MAX_Y || b->y > MAX_Y)
+		return ;
 
 	lenX = ft_abs(b->x - a->x);
 	lenY = ft_abs(b->y - a->y);

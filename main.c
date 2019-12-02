@@ -1,14 +1,14 @@
 #include <math.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <pthread.h>
 
 #include "fdf.h"
 
-void usage(void)
-{
-	printf("One file: ./fdf map\n");
-	ft_exit(0);
-}
+// void usage(void)
+// {
+// 	printf("One file: ./fdf map\n");
+// 	ft_exit(0);
+// }
 
 void print_map(t_wnd *wnd)
 {
@@ -17,15 +17,21 @@ void print_map(t_wnd *wnd)
 	{
 		for (size_t x = 0; x < vec_size(wnd->map_cp[0]); ++x)
 		{
-			wnd->map_cp[y][x].color = wnd->map[y][x].color;
+			wnd->map_cp[y][x].a_color = wnd->map[y][x].a_color;
+			wnd->map_cp[y][x].g_color = wnd->map[y][x].g_color;
+			wnd->map_cp[y][x].b_color = wnd->map[y][x].b_color;
 			if (x != vec_size(wnd->map_cp[0]) - 1)
 			{
-				wnd->map_cp[y][x + 1].color = wnd->map[y][x + 1].color;
+				wnd->map_cp[y][x + 1].a_color = wnd->map[y][x + 1].a_color;
+				wnd->map_cp[y][x + 1].g_color = wnd->map[y][x + 1].g_color;
+				wnd->map_cp[y][x + 1].b_color = wnd->map[y][x + 1].b_color;
 				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y][x + 1]);
 			}
 			if (y != vec_rows(wnd->map_cp) - 1)
 			{
-				wnd->map_cp[y + 1][x].color = wnd->map_cp[y + 1][x].color;
+				wnd->map_cp[y + 1][x].a_color = wnd->map_cp[y + 1][x].a_color;
+				wnd->map_cp[y + 1][x].g_color = wnd->map_cp[y + 1][x].g_color;
+				wnd->map_cp[y + 1][x].b_color = wnd->map_cp[y + 1][x].b_color;
 				draw_line(wnd, &wnd->map_cp[y][x], &wnd->map_cp[y + 1][x]);
 			}
 		}
@@ -50,8 +56,10 @@ void change_angle(t_wnd *wnd)
 				int x_ = wnd->map_cp[y][x].x;
 				int y_ = wnd->map_cp[y][x].y;
 				int z_ = wnd->map[y][x].z;
-				if (z_)
+				if (z_ && z_ > 0)
 					z_ += wnd->z_shift;
+				else if (z_ && z_ < 0)
+					z_ -= wnd->z_shift;
 				wnd->map_cp[y][x].y = y_ * cos_x + z_ * sin_x;
 				wnd->map_cp[y][x].z = -y_ * sin_x + z_ * cos_x;
 
@@ -83,21 +91,21 @@ t_wnd wnd_init(const char **argv)
 	wnd.imgptr = mlx_new_image(wnd.mlxptr, WIDTH, HEIGHT);
 	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes, &wnd.size_line, &wnd.endian);
 	wnd.bytes /= 8;
-	wnd.x_angle = -0.785;
+	wnd.x_angle = 0;
 	wnd.y_angle = 0;
 	wnd.z_angle = 0;
 	wnd.x_offset = 300;
 	wnd.y_offset = 300;
-	wnd.cell = 40;
-	wnd.z_shift = 290;
+	wnd.cell = 1;
+	wnd.z_shift = 0;
 	wnd.map = get_map(argv[1]);
 	wnd.map_cp = vec_cp(wnd.map);
-	for (size_t y = 0; y < vec_rows(wnd.map); ++y)
-	{
-		for (size_t x = 0; x < vec_size(wnd.map[0]); ++x)
-			printf("%8d\t", wnd.map[y][x].color);
-		printf("\n");
-	}
+	// for (size_t y = 0; y < vec_rows(wnd.map); ++y)
+	// {
+	// 	for (size_t x = 0; x < vec_size(wnd.map[0]); ++x)
+	// 		printf("%8d\t", wnd.map[y][x].color);
+	// 	printf("\n");
+	// }
 	wnd.x_center = (wnd.cell + vec_size(wnd.map[0]) * wnd.cell) / 2;
 	wnd.y_center = (wnd.cell + vec_rows(wnd.map) * wnd.cell) / 2;
 	change_angle(&wnd);
@@ -135,7 +143,7 @@ void shift_map(t_wnd *wnd, int x_, int y_)
 
 int key_press(int keycode, t_wnd *wnd)
 {
-	printf("%d\n", keycode);
+	// printf("%d\n", keycode);
 	if (keycode == ESC)
 		ft_exit(0);
 	else if (keycode == MINUS)
@@ -143,13 +151,13 @@ int key_press(int keycode, t_wnd *wnd)
 	else if (keycode == PLUS)
 		++wnd->cell;
 	else if (keycode == UP)
-		shift_map(wnd, 0, -10);
+		shift_map(wnd, 0, -50);
 	else if (keycode == DOWN)
-		shift_map(wnd, 0, 10);
+		shift_map(wnd, 0, 50);
 	else if (keycode == LEFT)
-		shift_map(wnd, -10, 0);
+		shift_map(wnd, -50, 0);
 	else if (keycode == RIGHT)
-		shift_map(wnd, 10, 0);
+		shift_map(wnd, 50, 0);
 	else if (keycode == W)
 		wnd->x_angle -= 3.14 / 360 * 6;
 	else if (keycode == S)
@@ -177,7 +185,7 @@ int key_press(int keycode, t_wnd *wnd)
 	}
 	if (keycode != UP && keycode != DOWN && keycode != LEFT && keycode != RIGHT)
 		change_angle(wnd);
-	printf("%f\n", wnd->x_angle);
+	// printf("%f\n", wnd->x_angle);
 	print_map(wnd);
 	return (1);
 }
@@ -188,7 +196,7 @@ int main(int argc, const char **argv)
 
 	if (argc != 2)
 	{
-		usage();
+		// usage();
 		return (0);
 	}
 
