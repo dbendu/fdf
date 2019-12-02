@@ -29,7 +29,7 @@ ifeq ($(SYSTEM), $(MACOS))
 	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o fdf
 else ifeq ($(SYSTEM), $(LINUX))
 	@rm -rf minilibx_macos
-	@-mv -f minilibx_linux minilibx
+	@-mv -f minilibx_linux minilibx &> /dev/null
 	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o fdf
 endif
 
@@ -55,6 +55,6 @@ ifeq ($(SYSTEM), $(MACOS))
 	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o fdf
 else ifeq ($(SYSTEM), $(LINUX))
 	@rm -rf minilibx_macos
-	@-mv -f minilibx_linux minilibx
+	@-mv -f minilibx_linux minilibx &> /dev/null
 	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o fdf
 endif
