@@ -74,7 +74,7 @@ typedef struct	s_point
 	int x;
 	int y;
 	int z;
-	int color;
+	 color;
 }				t_point;
 
 typedef struct	s_wnd

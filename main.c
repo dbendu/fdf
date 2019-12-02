@@ -83,13 +83,13 @@ t_wnd wnd_init(const char **argv)
 	wnd.imgptr = mlx_new_image(wnd.mlxptr, WIDTH, HEIGHT);
 	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes, &wnd.size_line, &wnd.endian);
 	wnd.bytes /= 8;
-	wnd.x_angle = 0;
+	wnd.x_angle = -0.785;
 	wnd.y_angle = 0;
 	wnd.z_angle = 0;
 	wnd.x_offset = 300;
 	wnd.y_offset = 300;
 	wnd.cell = 40;
-	wnd.z_shift = 0;
+	wnd.z_shift = 290;
 	wnd.map = get_map(argv[1]);
 	wnd.map_cp = vec_cp(wnd.map);
 	for (size_t y = 0; y < vec_rows(wnd.map); ++y)
@@ -177,6 +177,7 @@ int key_press(int keycode, t_wnd *wnd)
 	}
 	if (keycode != UP && keycode != DOWN && keycode != LEFT && keycode != RIGHT)
 		change_angle(wnd);
+	printf("%f\n", wnd->x_angle);
 	print_map(wnd);
 	return (1);
 }
