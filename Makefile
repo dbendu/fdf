@@ -16,7 +16,7 @@ HEADER = fdf.h
 SYSTEM =	$(shell uname)
 
 MACOS =		Darwin
-LINUX =		Ubuntu
+LINUX =		Linux
 
 all: $(NAME)
 

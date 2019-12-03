@@ -33,6 +33,11 @@
 # define I		105
 # define O		111
 
+# define WHEEL_UP	5
+# define WHEEL_DOWN	4
+
+# define TAB	65289
+
 #else
 
 # define WIDTH	2500
@@ -61,19 +66,17 @@
 # define I		34
 # define O		31
 
-# define SHIFT	257
-# define CTRL	256
-
 # define WHEEL_UP	5
 # define WHEEL_DOWN	4
 
 #endif
 
-#define MAX_X	(WIDTH - 1)
-#define MAX_Y	(HEIGHT - 1)
+# define MAX_X	(WIDTH - 1)
+# define MAX_Y	(HEIGHT - 1)
 
-#define __white		16777215
-#define __red		16711680
+# define __white		16777215
+# define __red			16711680
+# define __background	0x101010
 
 typedef struct	s_point
 {
@@ -125,6 +128,8 @@ typedef struct	s_wnd
 	double cos_x;
 	double cos_z;
 	double cos_y;
+
+	t_bool show_menu;
 
 }				t_wnd;
 
