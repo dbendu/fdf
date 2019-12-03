@@ -1,5 +1,7 @@
 #include "fdf.h"
 
+#include <stdio.h>
+
 t_bool is_num(const char *str, const char *str_beg)
 {
 	size_t i;
@@ -75,16 +77,16 @@ void parse_str(t_point ***map, const char *str)
 			++str;
 		while (ft_isdigit(*str))
 			++str;
-		point.a_color = 255;
-		point.g_color = 255;
-		point.b_color = 255;
+		point.red = 255;
+		point.green = 255;
+		point.blue = 255;
 		if (*str == ',')
 		{
 			str += 3;
 			int color = hex_to_dec(str);
-			point.a_color = (color >> 16) & 255;
-			point.g_color = (color >> 8) & 255;
-			point.b_color = color & 255;
+			point.red = (color >> 16) & 255;
+			point.green = (color >> 8) & 255;
+			point.blue = color & 255;
 			while (ft_ishex(*str))
 				++str;
 		}
@@ -98,11 +100,9 @@ t_point **get_map(const char *file)
 	t_point **map;
 	int fd;
 	char *str;
-	int rows;
 
 	fd = open(file, O_RDONLY);
 	map = NULL;
-	rows = 0;
 	while (get_next_line(fd, &str) == 1)
 	{
 		if (is_str_valid(str))
@@ -110,14 +110,9 @@ t_point **get_map(const char *file)
 		else
 		{
 			vec_clear(&map);
+			printf("%s\n", str);
 			error(2, "Invalid map: invalid str", NULL, 0);
 		}
-		if (rows && vec_size(map[rows]) != vec_size(map[rows - 1]))
-		{
-			vec_clear(&map);
-			error(2, "Invalid map: lenght", NULL, 0);
-		}
-		++rows;
 		ft_free(str);
 	}
 	if (!map || !vec_size(map[0]))
