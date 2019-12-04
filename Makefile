@@ -1,94 +1,41 @@
-# NAME = fdf
-
-# FLAGS = -Wall -Wextra -Werror -lm
-
-# MLXFLAGS_LINUX = -lmlx -lXext -lX11							-L minilibx/minilibx_linux -I minilibx/minilibx_linux
-# MLXFLAGS_MACOS = -lmlx -framework OpenGL -framework AppKit	-L minilibx/minilibx_macos -I minilibx/minilibx_macos
-
-# SRC = main.c	draw_line.c		input.c		print_map.c		$(LIBFT)
-
-# LIBFT = libft/libft.a
-
-# OBJS = $(SRC:.c=.o)
-
-# HEADER = fdf.h
-
-# SYSTEM =	$(shell uname)
-
-# MACOS =		Darwin
-# LINUX =		Linux
-
-# all: $(NAME)
-
-# $(NAME):
-# all:
-# 	@make -C libft
-# ifeq ($(SYSTEM), $(MACOS))
-# 	@gcc $(FLAGS) $(MLXFLAGS_MACOS) $(SRC) $(HEADER) -o fdf
-# else ifeq ($(SYSTEM), $(LINUX))
-# 	@gcc $(FLAGS) $(MLXFLAGS_LINUX) $(SRC) $(HEADER) -o fdf
-# endif
-
-# clean:
-# 	@make clean -C libft
-# 	@rm -rf $(OBJS)
-
-# fclean: clean
-# 	@make fclean -C libft
-# 	@rm -f $(NAME)
-
-# re: fclean all
-
-# c: clean
-
-# f: fclean
-
-# g:
-# 	@make g -C libft
-# ifeq ($(SYSTEM), $(MACOS))
-# 	@rm -rf minilibx_linux
-# 	@-mv -f minilibx_macos minilibx
-# 	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(HEADER) -o fdf
-# else ifeq ($(SYSTEM), $(LINUX))
-# 	@rm -rf minilibx_macos
-# 	@-mv -f minilibx_linux minilibx &> /dev/null
-# 	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(HEADER) -o fdf
-# endif
-
 NAME = fdf
 
-FLAGS = -Wall -Wextra -Werror -lm
+FLAGS = -Wall -Wextra -Werror -I./libft/includes 
 
-MLXFLAGS_LINUX = -lmlx -lXext -lX11 -L minilibx/minilibx_linux -I minilibx/minilibx_linux -Ilibft/includes
-MLXFLAGS_MACOS = -lmlx -L minilibx/minilibx_macos -I minilibx/minilibx_macos -framework OpenGL -framework AppKit -Ilibft/includes
+MLXFLAGS_LINUX = -L minilibx/minilibx_linux -I minilibx/minilibx_linux
+MLXFLAGS_MACOS = -L minilibx/minilibx_macos -I minilibx/minilibx_macos  -lmlx -framework OpenGL -framework AppKit	
 
 
-SRC = main.c	draw_line.c		input.c		print_map.c		keyboard.c		map_actions.c		mouse.c
+SRC =	main.c			draw_line.c			input.c		draw_map.c		\
+		keyboard.c		map_actions.c		mouse.c		threads.c
 
 LIBFT = libft/libft.a
 
-OBJS = $(SRC:.c=.o)
-
-HEADER = fdf.h
+OBJ = $(SRC:.c=.o)
 
 SYSTEM =	$(shell uname)
 
 MACOS =		Darwin
 LINUX =		Ubuntu
 
+%.o: %.c
+	gcc $(FLAGS) $(SRC) -c
+
 all: $(NAME)
 
-$(NAME): $(SRC)
-	@make -C libft
+$(NAME): $(OBJ)
+	make -C libft
+	make -C minilibx/minilibx_macos
 ifeq ($(SYSTEM), $(MACOS))
-	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o $(NAME)
+	gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
 else ifeq ($(SYSTEM), $(LINUX))
-	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o $(NAME)
+	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_LINUX) -c
+	@gcc $(OBJ) $(LIBFT) -o $(NAME)
 endif
 
 clean:
 	@make clean -C libft
-	@rm -rf $(OBJS)
+	@rm -rf $(OBJ)
 
 fclean: clean
 	@make fclean -C libft
@@ -100,10 +47,56 @@ c: clean
 
 f: fclean
 
-g:
-	@make g -C libft
-ifeq ($(SYSTEM), $(MACOS))
-	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o $(NAME)
-else ifeq ($(SYSTEM), $(LINUX))
-	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o $(NAME)
-endif
+#g:
+#	@make g -C libft
+#ifeq ($(SYSTEM), $(MACOS))
+#	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o $(NAME)
+#else ifeq ($(SYSTEM), $(LINUX))
+#	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o $(NAME)
+#endif
+ #-lmlx -lXext -lX11							
+#
+
+#---------------------------------------------------------------#
+
+#NAME = fillit
+#
+#CC = gcc
+#
+#CFLAGS = -Wall -Wextra -Werror -g
+#
+#PATH_LIBFT = libft
+#
+#SRC = main.c fillit.c validation.c writer.c
+#
+#OBJ = $(patsubst %.c,%.o,$(SRC))
+#
+#all: $(NAME)
+#
+#$(NAME): $(PATH_LIBFT)/libft.a $(OBJ)
+#
+#$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L $(PATH_LIBFT) -lft
+#
+#$(PATH_LIBFT)/libft.a:
+#
+#make -C $(PATH_LIBFT)
+#
+#%.o: %.c fillit.h
+#
+#$(CC) $(CFLAGS) -c $< -I $(PATH_LIBFT)
+#
+#clean:
+#
+#rm -f $(OBJ)
+#
+#make -C $(PATH_LIBFT) clean
+#
+#fclean: clean
+#
+#rm -f $(NAME)
+#
+#make -C $(PATH_LIBFT) fclean
+#
+#re: fclean all
+#
+#.PHONY: all clean fclean re

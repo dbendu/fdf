@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:41:06 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/03 20:42:13 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/03 22:59:34 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ static void		key_press_1(int keycode, t_wnd *wnd)
 		wnd->angles.z_angle += 3.14 / 360 * 6;
 	else if (keycode == TAB)
 		wnd->show_menu = !wnd->show_menu;
+	else if (keycode == ESC)
+		fdf_exit(wnd);
 }
 
-int			key_press(int keycode, t_wnd *wnd)
+int				key_press(int keycode, t_wnd *wnd)
 {
-	if (keycode == ESC)
-		fdf_exit(wnd);
-	else if (keycode == MINUS)
+	if (keycode == MINUS)
 		--wnd->cell;
 	else if (keycode == PLUS)
 		++wnd->cell;

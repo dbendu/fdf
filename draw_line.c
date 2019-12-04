@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:24:13 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/03 21:52:49 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/03 22:13:30 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,16 @@ static void		set_colors(t_point *a, t_point *b)
 		a->blue_shift = -a->blue_shift;
 }
 
-static void		Brez_vert(t_wnd *wnd, t_point *a, t_point *b)
+static void		brez_vert(t_wnd *wnd, t_point *a, t_point *b, int iters)
 {
 	const int	dx = b->x - a->x > 0 ? 1 : -1;
 	const int	dy = b->y - a->y > 0 ? 1 : -1;
-	const int	lenX = ft_abs(b->x - a->x);
-	const int	lenY = ft_abs(b->y - a->y);
-	int			iters;
+	const int	lenx = ft_abs(b->x - a->x);
+	const int	leny = ft_abs(b->y - a->y);
 	int			d;
 
-	iters = ft_max(lenX, lenY) + 1;
-	d = -lenY;
+	iters = ft_max(lenx, leny) + 1;
+	d = -leny;
 	while (iters--)
 	{
 		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
@@ -48,26 +47,25 @@ static void		Brez_vert(t_wnd *wnd, t_point *a, t_point *b)
 		a->green += a->green_shift;
 		a->blue += a->blue_shift;
 		a->y += dy;
-		d += 2 * lenX;
+		d += 2 * lenx;
 		if (d > 0)
 		{
-			d -= 2 * lenY;
+			d -= 2 * leny;
 			a->x += dx;
 		}
 	}
 }
 
-static void		Brez_hor(t_wnd *wnd, t_point *a, t_point *b)
+static void		brez_hor(t_wnd *wnd, t_point *a, t_point *b, int iters)
 {
 	const int	dx = b->x - a->x > 0 ? 1 : -1;
 	const int	dy = b->y - a->y > 0 ? 1 : -1;
-	const int	lenX = ft_abs(b->x - a->x);
-	const int	lenY = ft_abs(b->y - a->y);
-	int			iters;
+	const int	lenx = ft_abs(b->x - a->x);
+	const int	leny = ft_abs(b->y - a->y);
 	int			d;
 
-	iters = ft_max(lenX, lenY) + 1;
-	d = -lenX;
+	iters = ft_max(lenx, leny) + 1;
+	d = -lenx;
 	while (iters--)
 	{
 		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
@@ -77,10 +75,10 @@ static void		Brez_hor(t_wnd *wnd, t_point *a, t_point *b)
 		a->green += a->green_shift;
 		a->blue += a->blue_shift;
 		a->x += dx;
-		d += 2 * lenY;
+		d += 2 * leny;
 		if (d > 0)
 		{
-			d -= 2 * lenX;
+			d -= 2 * lenx;
 			a->y += dy;
 		}
 	}
@@ -88,18 +86,18 @@ static void		Brez_hor(t_wnd *wnd, t_point *a, t_point *b)
 
 void			draw_line(t_wnd *wnd, t_point a, t_point b)
 {
-	int lenX;
-	int lenY;
+	int lenx;
+	int leny;
 
 	if ((a.x < 0 && b.x < 0) || (a.y < 0 && b.y < 0) ||
 		(a.x > MAX_X && b.x > MAX_X) || (a.y > MAX_Y && b.y > MAX_Y))
 		return ;
 	set_colors(&a, &b);
-	lenX = ft_abs(b.x - a.x);
-	lenY = ft_abs(b.y - a.y);
-	if (lenX > lenY)
-		Brez_hor(wnd, &a, &b);
+	lenx = ft_abs(b.x - a.x);
+	leny = ft_abs(b.y - a.y);
+	if (lenx > leny)
+		brez_hor(wnd, &a, &b, 0);
 	else
-		Brez_vert(wnd, &a, &b);
+		brez_vert(wnd, &a, &b, 0);
 	return ;
 }
