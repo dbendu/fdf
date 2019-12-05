@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 04:20:39 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/05 15:21:13 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
+
+#  define LEFT_BUTTON	1
+#  define RIGHT_BUTTON	3
 
 #  define TAB			65289
 

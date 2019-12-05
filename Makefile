@@ -1,9 +1,9 @@
 NAME = fdf
 
-FLAGS = -Wall -Wextra -Werror -I./libft/includes 
+FLAGS = -Wall -Wextra -Werror -I./libft/includes
 
-MLXFLAGS_LINUX = -L minilibx/minilibx_linux -I minilibx/minilibx_linux
-MLXFLAGS_MACOS = -L minilibx/minilibx_macos -I minilibx/minilibx_macos  -lmlx -framework OpenGL -framework AppKit	
+MLXFLAGS_LINUX = -L minilibx/minilibx_linux -I minilibx/minilibx_linux	-lmlx -lXext -lX11
+MLXFLAGS_MACOS = -L minilibx/minilibx_macos -I minilibx/minilibx_macos 	-lmlx -framework OpenGL -framework AppKit
 
 
 SRC =	main.c			draw_line.c			input.c		draw_map.c		\
@@ -16,21 +16,22 @@ OBJ = $(SRC:.c=.o)
 SYSTEM =	$(shell uname)
 
 MACOS =		Darwin
-LINUX =		Ubuntu
+LINUX =		Linux
 
-%.o: %.c
+HEADER =	fdf.h
+
+%.o: %.c $(HEADER)
 	gcc $(FLAGS) $(SRC) -c
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	make -C libft
-	make -C minilibx/minilibx_macos
 ifeq ($(SYSTEM), $(MACOS))
+	make -C minilibx/minilibx_macos
 	gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
 else ifeq ($(SYSTEM), $(LINUX))
-	@gcc $(SRC) $(FLAGS) $(MLXFLAGS_LINUX) -c
-	@gcc $(OBJ) $(LIBFT) -o $(NAME)
+	gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
 endif
 
 clean:
@@ -54,7 +55,7 @@ f: fclean
 #else ifeq ($(SYSTEM), $(LINUX))
 #	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o $(NAME)
 #endif
- #-lmlx -lXext -lX11							
+ #
 #
 
 #---------------------------------------------------------------#

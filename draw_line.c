@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:24:13 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/03 22:13:30 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/05 15:16:15 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void		brez_vert(t_wnd *wnd, t_point *a, t_point *b, int iters)
 	while (iters--)
 	{
 		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
-			*(uint32_t*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) =
+			*(t_uint32*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) =
 				((int)a->red << 16) + ((int)a->green << 8) + a->blue;
 		a->red += a->red_shift;
 		a->green += a->green_shift;
@@ -69,7 +69,7 @@ static void		brez_hor(t_wnd *wnd, t_point *a, t_point *b, int iters)
 	while (iters--)
 	{
 		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
-			*(uint32_t*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) =
+			*(t_uint32*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) =
 				((int)a->red << 16) + ((int)a->green << 8) + a->blue;
 		a->red += a->red_shift;
 		a->green += a->green_shift;
