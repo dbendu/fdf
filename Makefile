@@ -52,9 +52,9 @@ g:
 	@make g -C libft
 ifeq ($(SYSTEM), $(MACOS))
 	@make -C minilibx/minilibx_macos
-	@gcc -g $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
+	@gcc -g $(FLAGS) $(SRC) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
 else ifeq ($(SYSTEM), $(LINUX))
-	@gcc -g $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
+	@gcc -g $(FLAGS) $(SRC) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
 endif
 
 #---------------------------------------------------------------#

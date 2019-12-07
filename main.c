@@ -6,7 +6,7 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:20:42 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/07 16:43:35 by user             ###   ########.fr       */
+/*   Updated: 2019/12/07 22:03:47 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,39 @@ void	fdf_exit(t_wnd *wnd)
 	exit(0);
 }
 
+void	get_mlx(t_wnd *wnd)
+{
+	wnd->mlxptr = mlx_init();
+	if (!wnd->mlxptr)
+		error(2, "cant create mlx", "get_mlx", 0);
+	wnd->wndptr = mlx_new_window(wnd->mlxptr, WIDTH, HEIGHT, "fdf");
+	if (!wnd->wndptr)
+		error(2, "cant create wnd", "get_mlx", 0);
+	wnd->imgptr = mlx_new_image(wnd->mlxptr, WIDTH, HEIGHT);
+	if (!wnd->imgptr)
+	{
+		mlx_destroy_window(wnd->mlxptr, wnd->wndptr);
+		error(2, "cant create img", "get_mlx", 0);
+	}
+	wnd->img = mlx_get_data_addr(wnd->imgptr, &wnd->bytes, &wnd->size_line,
+								&wnd->endian);
+}
+
 t_wnd	wnd_init(const char **argv)
 {
 	t_wnd wnd;
 
 	ft_memset(&wnd, 0, sizeof(t_wnd));
 	wnd.map = get_map(argv[1]);
+	// exit(0);
 	wnd.map_cp = vec_cp(wnd.map);
-	wnd.mlxptr = mlx_init();
-	wnd.wndptr = mlx_new_window(wnd.mlxptr, WIDTH, HEIGHT, "fdf");
-	wnd.imgptr = mlx_new_image(wnd.mlxptr, WIDTH, HEIGHT);
-	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes, &wnd.size_line,
-								&wnd.endian);
+	get_mlx(&wnd);
 	wnd.bytes /= 8;
 	wnd.cell = 5;
 	wnd.show_menu = 1;
 	wnd.rows = (int)vec_rows(wnd.map);
 	wnd.cols = (int)vec_size(wnd.map[0]);
+	wnd.fill_color = __WHITE;
 	wnd.x_offset = WIDTH / 2 - vec_size(wnd.map[0]) * wnd.cell / 2;
 	wnd.y_offset = HEIGHT / 2 - vec_rows(wnd.map) * wnd.cell / 2;
 	rotate(&wnd);

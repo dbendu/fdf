@@ -6,7 +6,7 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/05 15:21:13 by user             ###   ########.fr       */
+/*   Updated: 2019/12/07 22:00:58 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@
 
 # ifdef __unix__
 
-#  define WIDTH			1800
-#  define HEIGHT		1000
+#  define WIDTH				1800
+#  define HEIGHT			1000
+
+# define MAX_X			(WIDTH - 1)
+# define MAX_Y			(HEIGHT - 1)
 
 #  define ESC			65307
 
@@ -45,13 +48,15 @@
 #  define RIGHT			65363
 
 #  define I				105
-#  define O				111
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
 
 #  define LEFT_BUTTON	1
 #  define RIGHT_BUTTON	3
+
+#  define LESS			44
+#  define MORE			46
 
 #  define TAB			65289
 
@@ -81,7 +86,6 @@
 #  define RIGHT			124
 
 #  define I				34
-#  define O				31
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
@@ -89,20 +93,21 @@
 #  define LEFT_BUTTON	1
 #  define RIGHT_BUTTON	2
 
+#  define LESS
+#  define MORE
+
 #  define TAB			48
 
 # endif
 
-# define MAX_X			(WIDTH - 1)
-# define MAX_Y			(HEIGHT - 1)
-
 # define __WHITE		16777215
+# define __BLACK		0
 
 typedef struct	s_point
 {
-	int32_t		x;
-	int32_t		y;
-	int32_t		z;
+	t_int32		x;
+	t_int32		y;
+	t_int32		z;
 	float		red;
 	float		green;
 	float		blue;
@@ -113,9 +118,9 @@ typedef struct	s_point
 
 typedef struct	s_angles
 {
-	double		x_angle;
-	double		z_angle;
-	double		y_angle;
+	t_int16	x_angle;
+	t_int16	z_angle;
+	t_int16	y_angle;
 
 	double		sin_x;
 	double		sin_y;
@@ -168,6 +173,10 @@ typedef struct	s_wnd
 	int32_t		y_offset;
 
 	t_bool		show_menu;
+	t_bool		show_info;
+
+	t_int32		bkg_color;
+	t_int32		fill_color;
 }				t_wnd;
 
 typedef struct	s_threads

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_actions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:45:08 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 04:13:11 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/07 21:34:59 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void		shift_map(t_wnd *wnd, int x_, int y_)
 
 static void	set_angles(t_wnd *wnd)
 {
-	wnd->angles.sin_x = sin(wnd->angles.x_angle);
-	wnd->angles.sin_y = sin(wnd->angles.y_angle);
-	wnd->angles.sin_z = sin(wnd->angles.z_angle);
-	wnd->angles.cos_x = cos(wnd->angles.x_angle);
-	wnd->angles.cos_z = cos(wnd->angles.z_angle);
-	wnd->angles.cos_y = cos(wnd->angles.y_angle);
+	wnd->angles.sin_x = sin(wnd->angles.x_angle * 3.14 / 180);
+	wnd->angles.sin_y = sin(wnd->angles.y_angle * 3.14 / 180);
+	wnd->angles.sin_z = sin(wnd->angles.z_angle * 3.14 / 180);
+	wnd->angles.cos_x = cos(wnd->angles.x_angle * 3.14 / 180);
+	wnd->angles.cos_z = cos(wnd->angles.z_angle * 3.14 / 180);
+	wnd->angles.cos_y = cos(wnd->angles.y_angle * 3.14 / 180);
 	wnd->angles.x_x = wnd->angles.cos_z * wnd->angles.cos_y;
 	wnd->angles.x_y = -wnd->angles.sin_z * wnd->angles.cos_x +
 				wnd->angles.cos_z * wnd->angles.sin_y * wnd->angles.sin_x;
