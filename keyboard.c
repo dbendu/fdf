@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:41:06 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/03 22:59:34 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/07 16:00:40 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void		key_press_1(int keycode, t_wnd *wnd)
 
 int				key_press(int keycode, t_wnd *wnd)
 {
-	if (keycode == MINUS)
+	if (keycode == MINUS && wnd->cell)
 		--wnd->cell;
 	else if (keycode == PLUS)
 		++wnd->cell;

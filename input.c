@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 23:35:38 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 04:04:52 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/07 17:00:21 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void			parse_str(t_point ***map, const char *str)
 {
 	t_point		point;
 
-	*map ? vec_addrow(map) :
+	*map ? vec_addrow(map, vec_size((*map)[0])) :
 			(*map = vec_init(1, 0, sizeof(t_point)));
 	while (*str)
 	{
@@ -131,7 +131,7 @@ t_point			**get_map(const char *file)
 			error(2, "Invalid map: invalid str", NULL, 0);
 		if (rows && vec_size(map[rows]) != vec_size(map[rows - 1]))
 			error(2, "Invalid map: different len of strings", NULL, 0);
-		ft_free(str);
+		free(str);
 		++rows;
 	}
 	if (!map || !vec_size(map[0]))

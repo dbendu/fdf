@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 19:57:31 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 03:14:09 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/07 15:13:43 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,7 @@ void			draw_map(t_wnd *wnd)
 	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
 	if (wnd->show_menu)
 		draw_menu(wnd);
+	if (!wnd->cell)
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH / 2 - 150, HEIGHT / 2,
+						__WHITE, "Cell size is 0, you cant see the map");
 }

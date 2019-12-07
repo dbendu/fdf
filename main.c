@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:20:42 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 03:54:25 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/07 16:43:35 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,16 @@ t_wnd	wnd_init(const char **argv)
 	t_wnd wnd;
 
 	ft_memset(&wnd, 0, sizeof(t_wnd));
+	wnd.map = get_map(argv[1]);
+	wnd.map_cp = vec_cp(wnd.map);
 	wnd.mlxptr = mlx_init();
 	wnd.wndptr = mlx_new_window(wnd.mlxptr, WIDTH, HEIGHT, "fdf");
 	wnd.imgptr = mlx_new_image(wnd.mlxptr, WIDTH, HEIGHT);
 	wnd.img = mlx_get_data_addr(wnd.imgptr, &wnd.bytes, &wnd.size_line,
 								&wnd.endian);
 	wnd.bytes /= 8;
-	wnd.cell = 5
-	;
+	wnd.cell = 5;
 	wnd.show_menu = 1;
-	wnd.map = get_map(argv[1]);
-	wnd.map_cp = vec_cp(wnd.map);
 	wnd.rows = (int)vec_rows(wnd.map);
 	wnd.cols = (int)vec_size(wnd.map[0]);
 	wnd.x_offset = WIDTH / 2 - vec_size(wnd.map[0]) * wnd.cell / 2;

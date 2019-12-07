@@ -26,12 +26,12 @@ HEADER =	fdf.h
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	make -C libft
+	@make -C libft
 ifeq ($(SYSTEM), $(MACOS))
-	make -C minilibx/minilibx_macos
-	gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
+	@make -C minilibx/minilibx_macos
+	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
 else ifeq ($(SYSTEM), $(LINUX))
-	gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
+	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
 endif
 
 clean:
@@ -48,15 +48,14 @@ c: clean
 
 f: fclean
 
-#g:
-#	@make g -C libft
-#ifeq ($(SYSTEM), $(MACOS))
-#	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_MACOS) $(LIBFT) -o $(NAME)
-#else ifeq ($(SYSTEM), $(LINUX))
-#	@gcc $(SRC) -g $(FLAGS) $(MLXFLAGS_LINUX) $(LIBFT) -o $(NAME)
-#endif
- #
-#
+g:
+	@make g -C libft
+ifeq ($(SYSTEM), $(MACOS))
+	@make -C minilibx/minilibx_macos
+	@gcc -g $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_MACOS)
+else ifeq ($(SYSTEM), $(LINUX))
+	@gcc -g $(FLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(MLXFLAGS_LINUX) -pthread -lm
+endif
 
 #---------------------------------------------------------------#
 
