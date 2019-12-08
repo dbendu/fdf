@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:12:32 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 01:52:42 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/08 18:26:41 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ int		mouse_move(int x, int y, t_wnd *wnd)
 	else if (wnd->mouse.is_right_button_active)
 	{
 		if (x > wnd->mouse.x)
-			wnd->angles.y_angle += 3.14 / 360 * 6;
+			wnd->angles.y_angle += 3;
 		else if (x < wnd->mouse.x)
-			wnd->angles.y_angle -= 3.14 / 360 * 6;
+			wnd->angles.y_angle -= 3;
 		if (y > wnd->mouse.y)
-			wnd->angles.x_angle -= 3.14 / 360 * 6;
+			wnd->angles.x_angle -= 3;
 		else if (y < wnd->mouse.y)
-			wnd->angles.x_angle += 3.14 / 360 * 6;
+			wnd->angles.x_angle += 3;
 		wnd->mouse.x = x;
 		wnd->mouse.y = y;
 		rotate(wnd);

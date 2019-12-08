@@ -6,7 +6,7 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 19:57:31 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/07 22:05:33 by user             ###   ########.fr       */
+/*   Updated: 2019/12/08 16:33:08 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,14 @@ static void		show_text(t_wnd *wnd)
 		sprintf(str, "cell: %d", wnd->cell);
 		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH - 480, HEIGHT - 190, wnd->fill_color,
 						str);
-		sprintf(str, "map size: %dx%d", wnd->rows, wnd->cols);
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH - 480, HEIGHT - 120, wnd->fill_color,
+		sprintf(str, "gradient: %s", wnd->gradient ? "on" : "off");
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH - 480, HEIGHT - 160, wnd->fill_color,
+						str);
+		sprintf(str, "map size: %zux%zu", wnd->rows, wnd->cols);
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH - 480, HEIGHT - 50, wnd->fill_color,
+						str);
+		sprintf(str, "threads: %s", wnd->threads ? "on" : "off");
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH - 480, HEIGHT - 20, wnd->fill_color,
 						str);
 		free(str);
 	}
@@ -117,23 +123,16 @@ static void		show_text(t_wnd *wnd)
 
 void			draw_map(t_wnd *wnd)
 {
-	int	y;
-	int	x;
-
 	ft_memset(wnd->img, wnd->bkg_color, wnd->size_line * HEIGHT);
-	y = -1;
 	if (wnd->cell)
-		while (++y < wnd->rows)
-		{
-			x = -1;
-			while (++x < wnd->cols)
+		for (size_t y = 0; y < wnd->rows; ++y)
+			for (size_t x = 0; x < wnd->cols; ++x)
 			{
 				if (x != wnd->cols - 1)
 					draw_line(wnd, wnd->map_cp[y][x], wnd->map_cp[y][x + 1]);
 				if (y != wnd->rows - 1)
 					draw_line(wnd, wnd->map_cp[y][x], wnd->map_cp[y + 1][x]);
 			}
-		}
 	if (wnd->show_menu)
 		draw_menu_box(wnd);
 	if (wnd->show_info)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 03:44:47 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/04 03:49:19 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/08 21:50:01 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,67 +34,68 @@ static void	eval(t_wnd *wnd, int x, int y)
 void		*rotate_thread1(void *param)
 {
 	t_wnd	*wnd;
-	int		y;
-	int		x;
 
 	wnd = (t_wnd*)param;
-	y = -1;
-	while (++y < wnd->rows / 4)
-	{
-		x = -1;
-		while (++x < wnd->cols)
+	for (size_t y = 0; y < wnd->rows / 4; ++y)
+		for (size_t x = 0; x < wnd->cols; ++x)
 			eval(wnd, x, y);
-	}
 	pthread_exit(NULL);
 }
 
 void		*rotate_thread2(void *param)
 {
 	t_wnd	*wnd;
-	int		y;
-	int		x;
 
 	wnd = (t_wnd*)param;
-	y = wnd->rows / 4 - 1;
-	while (++y < wnd->rows / 2)
-	{
-		x = -1;
-		while (++x < wnd->cols)
+	for (size_t y = wnd->rows / 4; y < wnd->rows / 2; ++y)
+		for (size_t x = 0; x < wnd->cols; ++x)
 			eval(wnd, x, y);
-	}
 	pthread_exit(NULL);
 }
 
 void		*rotate_thread3(void *param)
 {
 	t_wnd	*wnd;
-	int		y;
-	int		x;
 
 	wnd = (t_wnd*)param;
-	y = wnd->rows / 2 - 1;
-	while (++y < wnd->rows / 4 * 3)
-	{
-		x = -1;
-		while (++x < wnd->cols)
+	for (size_t y = wnd->rows / 2; y < wnd->rows / 4 * 3; ++y)
+		for (size_t x = 0; x < wnd->cols; ++x)
 			eval(wnd, x, y);
-	}
 	pthread_exit(NULL);
 }
 
 void		*rotate_thread4(void *param)
 {
 	t_wnd	*wnd;
-	int		y;
-	int		x;
 
 	wnd = (t_wnd*)param;
-	y = wnd->rows / 4 * 3 - 1;
-	while (++y < wnd->rows)
-	{
-		x = -1;
-		while (++x < wnd->cols)
+	for (size_t y = wnd->rows / 4 * 3; y < wnd->rows; ++y)
+		for (size_t x = 0; x < wnd->cols; ++x)
 			eval(wnd, x, y);
-	}
 	pthread_exit(NULL);
+}
+
+void		rotate_threads(t_wnd *wnd)
+{
+	pthread_t thr1;
+	pthread_t thr2;
+	pthread_t thr3;
+	pthread_t thr4;
+
+	if (pthread_create(&thr1, NULL, rotate_thread1, wnd))
+		error(2, "cant create thread", "rotate", 0);
+	if (pthread_create(&thr2, NULL, rotate_thread2, wnd))
+		error(2, "cant create thread", "rotate", 0);
+	if (pthread_create(&thr3, NULL, rotate_thread3, wnd))
+		error(2, "cant create thread", "rotate", 0);
+	if (pthread_create(&thr4, NULL, rotate_thread4, wnd))
+		error(2, "cant create thread", "rotate", 0);
+	if (pthread_join(thr1, NULL))
+		error(2, "cant exit thread", "rotate", 0);
+	if (pthread_join(thr2, NULL))
+		error(2, "cant exit thread", "rotate", 0);
+	if (pthread_join(thr3, NULL))
+		error(2, "cant exit thread", "rotate", 0);
+	if (pthread_join(thr4, NULL))
+		error(2, "cant exit thread", "rotate", 0);
 }

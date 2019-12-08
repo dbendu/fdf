@@ -6,7 +6,7 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/07 22:00:58 by user             ###   ########.fr       */
+/*   Updated: 2019/12/08 17:42:11 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 #  define RIGHT			65363
 
 #  define I				105
+#  define G				103
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
@@ -161,8 +162,8 @@ typedef struct	s_wnd
 	t_angles	angles;
 	t_mouse		mouse;
 
-	int32_t		rows;
-	int32_t		cols;
+	size_t		rows;
+	size_t		cols;
 
 	int32_t		bytes;
 	int32_t		size_line;
@@ -177,6 +178,9 @@ typedef struct	s_wnd
 
 	t_int32		bkg_color;
 	t_int32		fill_color;
+
+	t_bool		threads;
+	t_bool		gradient;
 }				t_wnd;
 
 typedef struct	s_threads
@@ -194,6 +198,7 @@ void			draw_map(t_wnd *wnd);
 
 void			shift_map(t_wnd *wnd, int32_t x_, int32_t y_);
 void			rotate(t_wnd *wnd);
+void			rotate_threads(t_wnd *wnd);
 
 int32_t			key_press(int keycode, t_wnd *wnd);
 int32_t			mouse_press(int32_t button, int32_t x, int32_t y, t_wnd *wnd);

@@ -6,10 +6,11 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:20:42 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/07 22:03:47 by user             ###   ########.fr       */
+/*   Updated: 2019/12/08 22:32:17 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "fdf.h"
 
 void	usage(void)
@@ -51,14 +52,19 @@ t_wnd	wnd_init(const char **argv)
 
 	ft_memset(&wnd, 0, sizeof(t_wnd));
 	wnd.map = get_map(argv[1]);
-	// exit(0);
 	wnd.map_cp = vec_cp(wnd.map);
+	vec_clear(&wnd.map);
+	vec_clear(&wnd.map_cp);
+	exit(0);
 	get_mlx(&wnd);
 	wnd.bytes /= 8;
 	wnd.cell = 5;
 	wnd.show_menu = 1;
 	wnd.rows = (int)vec_rows(wnd.map);
 	wnd.cols = (int)vec_size(wnd.map[0]);
+	if (wnd.rows > 40 || (wnd.rows > 20 && wnd.cols > 100))
+		wnd.threads = TRUE;
+	wnd.gradient = TRUE;
 	wnd.fill_color = __WHITE;
 	wnd.x_offset = WIDTH / 2 - vec_size(wnd.map[0]) * wnd.cell / 2;
 	wnd.y_offset = HEIGHT / 2 - vec_rows(wnd.map) * wnd.cell / 2;

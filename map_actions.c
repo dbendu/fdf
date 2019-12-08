@@ -6,7 +6,7 @@
 /*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:45:08 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/07 21:34:59 by user             ###   ########.fr       */
+/*   Updated: 2019/12/08 15:56:05 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,31 @@ static void	set_angles(t_wnd *wnd)
 
 void		rotate(t_wnd *wnd)
 {
-	pthread_t thr1;
-	pthread_t thr2;
-	pthread_t thr3;
-	pthread_t thr4;
+	t_int32 x_;
+	t_int32 y_;
 
 	set_angles(wnd);
-	if (pthread_create(&thr1, NULL, rotate_thread1, wnd))
-		error(2, "cant create thread", "rotate", 0);
-	if (pthread_create(&thr2, NULL, rotate_thread2, wnd))
-		error(2, "cant create thread", "rotate", 0);
-	if (pthread_create(&thr3, NULL, rotate_thread3, wnd))
-		error(2, "cant create thread", "rotate", 0);
-	if (pthread_create(&thr4, NULL, rotate_thread4, wnd))
-		error(2, "cant create thread", "rotate", 0);
-	if (pthread_join(thr1, NULL))
-		error(2, "cant exit thread", "rotate", 0);
-	if (pthread_join(thr2, NULL))
-		error(2, "cant exit thread", "rotate", 0);
-	if (pthread_join(thr3, NULL))
-		error(2, "cant exit thread", "rotate", 0);
-	if (pthread_join(thr4, NULL))
-		error(2, "cant exit thread", "rotate", 0);
+	if (wnd->threads)
+		rotate_threads(wnd);
+	else
+	{
+		for (size_t y = 0; y < wnd->rows; ++y)
+		{
+			for (size_t x = 0; x < wnd->cols; ++x)
+			{
+				wnd->map_cp[y][x].y = y * wnd->cell - wnd->rows * wnd->cell / 2;
+				wnd->map_cp[y][x].x = x * wnd->cell - wnd->cols * wnd->cell / 2;
+				x_ = wnd->map_cp[y][x].x;
+				y_ = wnd->map_cp[y][x].y;
+				wnd->map_cp[y][x].x = x_ * wnd->angles.x_x + y_ * wnd->angles.x_y +
+				wnd->map[y][x].z * wnd->angles.x_z;
+				wnd->map_cp[y][x].y = x_ * wnd->angles.y_x + y_ * wnd->angles.y_y +
+				wnd->map[y][x].z * wnd->angles.y_z;
+				wnd->map_cp[y][x].z = x_ * wnd->angles.z_x + y_ * wnd->angles.z_y +
+				wnd->map[y][x].z * wnd->angles.z_z;
+				wnd->map_cp[y][x].x += wnd->x_offset;
+				wnd->map_cp[y][x].y += wnd->y_offset;
+			}
+		}
+	}
 }
