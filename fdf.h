@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/16 21:02:40 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/16 22:10:42 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,12 @@
 # define __WHITE		16777215
 # define __BLACK		0
 
+typedef struct	s_data
+{
+	t_int64		z;
+	t_int64		color;
+}				t_data;
+
 typedef struct	s_point
 {
 	t_int32		x;
@@ -155,7 +161,7 @@ typedef struct	s_wnd
 	void		*wndptr;
 	void		*imgptr;
 	char		*img;
-	t_point		**map;
+	t_data		**map;
 	t_point		**map_cp;
 
 	t_angles	angles;
@@ -185,7 +191,7 @@ typedef struct	s_threads
 	int			y_end;
 }				t_threads;
 
-t_point			**get_map(const char *file);
+t_data			**get_data(const char *filename);
 
 void			draw_line(t_wnd *wnd, t_point a, t_point b);
 void			draw_map(t_wnd *wnd);
