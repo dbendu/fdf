@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:24:13 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/08 17:14:21 by user             ###   ########.fr       */
+/*   Updated: 2019/12/16 21:06:07 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,66 +88,6 @@ static void		brez_hor_gradiend(t_wnd *wnd, t_point *a, t_point *b)
 	}
 }
 
-static void		brez_hor(t_wnd *wnd, t_point *a, t_point *b)
-{
-	const int	dx = b->x - a->x > 0 ? 1 : -1;
-	const int	dy = b->y - a->y > 0 ? 1 : -1;
-	const int	lenx = ft_abs(b->x - a->x);
-	const int	leny = ft_abs(b->y - a->y);
-	int			d;
-	int			color;
-	int			iters;
-
-	d = -lenx;
-	color = ((int)b->red << 16) + ((int)b->green << 8) + b->blue;
-	iters = ft_max(lenx, leny) + 1;
-	while (iters--)
-	{
-		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
-			*(t_uint32*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) = color;
-		a->red += a->red_shift;
-		a->green += a->green_shift;
-		a->blue += a->blue_shift;
-		a->x += dx;
-		d += 2 * leny;
-		if (d > 0)
-		{
-			d -= 2 * lenx;
-			a->y += dy;
-		}
-	}
-}
-
-static void		brez_vert(t_wnd *wnd, t_point *a, t_point *b)
-{
-	const int	dx = b->x - a->x > 0 ? 1 : -1;
-	const int	dy = b->y - a->y > 0 ? 1 : -1;
-	const int	lenx = ft_abs(b->x - a->x);
-	const int	leny = ft_abs(b->y - a->y);
-	int			d;
-	int			color;
-	int			iters;
-
-	d = -leny;
-	color = ((int)b->red << 16) + ((int)b->green << 8) + b->blue;
-	iters = ft_max(lenx, leny) + 1;
-	while (iters--)
-	{
-		if (a->x >= 0 && a->y >= 0 && a->x <= MAX_X && a->y <= MAX_Y)
-			*(t_uint32*)(wnd->img + a->y * wnd->size_line + a->x * wnd->bytes) = color;
-		a->red += a->red_shift;
-		a->green += a->green_shift;
-		a->blue += a->blue_shift;
-		a->y += dy;
-		d += 2 * lenx;
-		if (d > 0)
-		{
-			d -= 2 * leny;
-			a->x += dx;
-		}
-	}
-}
-
 void			draw_line(t_wnd *wnd, t_point a, t_point b)
 {
 	int lenx;
@@ -159,8 +99,8 @@ void			draw_line(t_wnd *wnd, t_point a, t_point b)
 	lenx = ft_abs(b.x - a.x);
 	leny = ft_abs(b.y - a.y);
 	if (lenx > leny)
-		wnd->gradient ? brez_hor_gradiend(wnd, &a, &b) : brez_hor(wnd, &a, &b);
+		brez_hor_gradiend(wnd, &a, &b);
 	else
-		wnd->gradient ? brez_vert_gradient(wnd, &a, &b) : brez_vert(wnd, &a, &b);
+		brez_vert_gradient(wnd, &a, &b);
 	return ;
 }

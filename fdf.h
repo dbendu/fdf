@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/08 17:42:11 by user             ###   ########.fr       */
+/*   Updated: 2019/12/16 21:02:40 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@
 
 #  define WIDTH				1800
 #  define HEIGHT			1000
-
-# define MAX_X			(WIDTH - 1)
-# define MAX_Y			(HEIGHT - 1)
 
 #  define ESC			65307
 
@@ -48,7 +45,6 @@
 #  define RIGHT			65363
 
 #  define I				105
-#  define G				103
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
@@ -101,6 +97,9 @@
 
 # endif
 
+# define MAX_X			(WIDTH - 1)
+# define MAX_Y			(HEIGHT - 1)
+
 # define __WHITE		16777215
 # define __BLACK		0
 
@@ -146,8 +145,8 @@ typedef struct	s_mouse
 {
 	t_bool		is_left_button_active;
 	t_bool		is_right_button_active;
-	int32_t		x;
-	int32_t		y;
+	t_int32		x;
+	t_int32		y;
 }				t_mouse;
 
 typedef struct	s_wnd
@@ -165,22 +164,17 @@ typedef struct	s_wnd
 	size_t		rows;
 	size_t		cols;
 
-	int32_t		bytes;
-	int32_t		size_line;
-	int32_t		endian;
+	t_int32		bytes;
+	t_int32		size_line;
+	t_int32		endian;
 	unsigned	cell;
 
-	int32_t		x_offset;
-	int32_t		y_offset;
+	t_int32		x_offset;
+	t_int32		y_offset;
 
 	t_bool		show_menu;
 	t_bool		show_info;
-
-	t_int32		bkg_color;
-	t_int32		fill_color;
-
 	t_bool		threads;
-	t_bool		gradient;
 }				t_wnd;
 
 typedef struct	s_threads
