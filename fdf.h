@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/17 16:38:54 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 18:56:38 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,8 @@ typedef struct	s_threads
 t_data			**get_data(const char *filename);
 
 void			draw_line(t_wnd *wnd, t_point a, t_point b);
-void			draw_map(t_wnd *wnd);
+int			draw_map(t_wnd *wnd);
+// void			draw_map(t_wnd *wnd);
 
 void			shift_map(t_wnd *wnd, int32_t x_, int32_t y_);
 void			rotate(t_wnd *wnd);

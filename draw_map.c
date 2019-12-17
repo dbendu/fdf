@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 19:57:31 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/17 17:18:10 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 18:56:35 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ static void		show_text(t_wnd *wnd)
 						__WHITE, "Cell size is 0, you can't see the map");
 }
 
-void			draw_map(t_wnd *wnd)
+int			draw_map(t_wnd *wnd)
+// void			draw_map(t_wnd *wnd)
 {
 	ft_memset(wnd->img, __BLACK, wnd->size_line * HEIGHT);
 	if (wnd->cell)
@@ -149,4 +150,5 @@ void			draw_map(t_wnd *wnd)
 		draw_info_box(wnd);
 	mlx_put_image_to_window(wnd->mlxptr, wnd->wndptr, wnd->imgptr, 0, 0);
 	show_text(wnd);
+	return (1);
 }
