@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/16 22:10:42 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:38:54 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@
 #  define LEFT_BUTTON	1
 #  define RIGHT_BUTTON	3
 
-#  define LESS			44
-#  define MORE			46
-
 #  define TAB			65289
 
 # else
@@ -83,15 +80,13 @@
 #  define RIGHT			124
 
 #  define I				34
+#  define T				17
 
 #  define WHEEL_UP		5
 #  define WHEEL_DOWN	4
 
 #  define LEFT_BUTTON	1
 #  define RIGHT_BUTTON	2
-
-#  define LESS
-#  define MORE
 
 #  define TAB			48
 
@@ -105,21 +100,17 @@
 
 typedef struct	s_data
 {
-	t_int64		z;
-	t_int64		color;
+	t_int32		z;
+	t_int32		color;
 }				t_data;
 
 typedef struct	s_point
 {
 	t_int32		x;
 	t_int32		y;
-	t_int32		z;
 	float		red;
 	float		green;
 	float		blue;
-	float		red_shift;
-	float		green_shift;
-	float		blue_shift;
 }				t_point;
 
 typedef struct	s_angles
@@ -186,9 +177,9 @@ typedef struct	s_wnd
 typedef struct	s_threads
 {
 	t_wnd		*wnd;
-	int			y;
-	int			x;
-	int			y_end;
+	t_uint32	y_beg;
+	t_uint32	y_end;
+	pthread_t	thread;
 }				t_threads;
 
 t_data			**get_data(const char *filename);

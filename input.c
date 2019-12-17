@@ -6,33 +6,33 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:57:27 by user              #+#    #+#             */
-/*   Updated: 2019/12/16 22:10:47 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 15:44:53 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void		file_error(t_point ***map, const char *msg)
+static void		file_error(t_data ***map, const char *msg)
 {
 	vec_clear(map);
 	error(2, msg, NULL, 0);
 }
 
 static void		get_color(const char **str, t_data *point,
-							t_point ***map)
+							t_data ***map)
 {
 	++*str;
 	if ((*str)[0] != '0' || (*str)[1] != 'x')
 		file_error(map, "invalid syntax: [num],[\'0x\'_hex_]");
 	*str += 2;
-	point->color = hex_to_dec(str);
+	point->color = hex_to_dec(*str);
 	while (ft_ishex(**str))
 		++*str;
 	if (**str && !ft_isspace(**str))
 		file_error(map, "invalid syntax: nums must been divided by spaces");
 }
 
-static void		parse_str(t_point ***map, const char *str)
+static void		parse_str(t_data ***map, const char *str)
 {
 	t_data point;
 
@@ -51,6 +51,8 @@ static void		parse_str(t_point ***map, const char *str)
 			++str;
 		if (*str == ',')
 			get_color(&str, &point, map);
+		else
+			point.color = __WHITE;
 		vec_pushback(&(*map)[vec_rows(*map) - 1], &point);
 	}
 }

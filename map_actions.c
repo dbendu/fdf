@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_actions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:45:08 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/08 15:56:05 by user             ###   ########.fr       */
+/*   Updated: 2019/12/17 16:09:41 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void		shift_map(t_wnd *wnd, int x_, int y_)
 {
-	size_t y;
-	size_t x;
 	size_t rows;
 	size_t cols;
 
@@ -23,19 +21,13 @@ void		shift_map(t_wnd *wnd, int x_, int y_)
 	wnd->y_offset += y_;
 	rows = vec_rows(wnd->map);
 	cols = vec_size(wnd->map[0]);
-	y = 0;
-	while (y < rows)
+	for (size_t y = 0; y < rows; ++y)
 	{
-		x = 0;
-		while (x < cols)
+		for (size_t x = 0; x < cols; ++x)
 		{
-			wnd->map[y][x].x += x_;
-			wnd->map[y][x].y += y_;
 			wnd->map_cp[y][x].x += x_;
 			wnd->map_cp[y][x].y += y_;
-			++x;
 		}
-		++y;
 	}
 }
 
@@ -57,12 +49,9 @@ static void	set_angles(t_wnd *wnd)
 				wnd->angles.sin_x * wnd->angles.sin_y * wnd->angles.sin_z;
 	wnd->angles.y_z = -wnd->angles.cos_z * wnd->angles.sin_x +
 				wnd->angles.sin_z * wnd->angles.sin_y * wnd->angles.cos_x;
-	wnd->angles.z_x = -wnd->angles.sin_y;
-	wnd->angles.z_y = wnd->angles.cos_y * wnd->angles.sin_x;
-	wnd->angles.z_z = wnd->angles.cos_y * wnd->angles.cos_x;
 }
 
-void		rotate(t_wnd *wnd)
+void			rotate(t_wnd *wnd)
 {
 	t_int32 x_;
 	t_int32 y_;
@@ -84,8 +73,6 @@ void		rotate(t_wnd *wnd)
 				wnd->map[y][x].z * wnd->angles.x_z;
 				wnd->map_cp[y][x].y = x_ * wnd->angles.y_x + y_ * wnd->angles.y_y +
 				wnd->map[y][x].z * wnd->angles.y_z;
-				wnd->map_cp[y][x].z = x_ * wnd->angles.z_x + y_ * wnd->angles.z_y +
-				wnd->map[y][x].z * wnd->angles.z_z;
 				wnd->map_cp[y][x].x += wnd->x_offset;
 				wnd->map_cp[y][x].y += wnd->y_offset;
 			}

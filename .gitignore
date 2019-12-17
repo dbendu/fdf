@@ -3,3 +3,4 @@ a.out
 fdf
 *.a
 *.o
+fdf.d*

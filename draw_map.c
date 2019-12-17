@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 19:57:31 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/16 21:41:24 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 17:18:10 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void		draw_menu_box(t_wnd *wnd)
 	t_point	b;
 	size_t	i;
 
-	i = HEIGHT - 299;
+	i = HEIGHT - 399;
 	while (++i < HEIGHT)
 		ft_memset(wnd->img + wnd->size_line * i, __BLACK, 500 * wnd->bytes);
 	a.red = __WHITE;
@@ -30,7 +30,7 @@ static void		draw_menu_box(t_wnd *wnd)
 	b.green = __WHITE;
 	a.x = 0;
 	b.x = 499;
-	a.y = HEIGHT - 300;
+	a.y = HEIGHT - 400;
 	b.y = a.y;
 	draw_line(wnd, a, b);
 	++a.y;
@@ -38,7 +38,7 @@ static void		draw_menu_box(t_wnd *wnd)
 	draw_line(wnd, a, b);
 	a.x = 498;
 	b.x = a.x;
-	a.y = HEIGHT - 298;
+	a.y = HEIGHT - 398;
 	b.y = MAX_Y;
 	draw_line(wnd, a, b);
 	++a.x;
@@ -82,22 +82,24 @@ static void		show_text(t_wnd *wnd)
 {
 	if (wnd->show_menu)
 	{
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 280, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 380, __WHITE,
 						"w, s - rotate x");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 250, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 350, __WHITE,
 						"a, d - rotate y");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 220, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 320, __WHITE,
 						"q, e - rotate z");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 190, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 290, __WHITE,
 						"-, +, mouse wheel - change zoom");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 160, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 260, __WHITE,
 						"arrows / left mouse button + move - move map");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 130, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 230, __WHITE,
 						"right mouse button + move - rotate x / y");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 100, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 200, __WHITE,
 						"space - reset rotate");
-		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 70, __WHITE,
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 170, __WHITE,
 						"i - show / hide info");
+		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 140, __WHITE,
+						"t - on / off threads");
 		mlx_string_put(wnd->mlxptr, wnd->wndptr, 25, HEIGHT - 20, __WHITE,
 						"tab - show / hide panel");
 	}
@@ -126,7 +128,7 @@ static void		show_text(t_wnd *wnd)
 	}
 	if (!wnd->cell)
 		mlx_string_put(wnd->mlxptr, wnd->wndptr, WIDTH / 2 - 150, HEIGHT / 2,
-						__WHITE, "Cell size is 0, you cant see the map");
+						__WHITE, "Cell size is 0, you can't see the map");
 }
 
 void			draw_map(t_wnd *wnd)

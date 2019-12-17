@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 21:20:42 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/16 22:10:57 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:06:32 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ t_point	**map_init(const t_data **data)
 	{
 		for (size_t col = 0; col < cols; ++col)
 		{
-			point.z = data[row][col].z;
 			point.red = (data[row][col].color >> 16) & 255;
 			point.green = (data[row][col].color >> 8) & 255;
 			point.blue = data[row][col].color & 255;
 			vec_pushback(&(map[row]), &point);
 		}
 	}
+	return (map);
 }
 
 t_wnd	wnd_init(const char **argv)
@@ -75,7 +75,7 @@ t_wnd	wnd_init(const char **argv)
 
 	ft_memset(&wnd, 0, sizeof(t_wnd));
 	wnd.map = get_data(argv[1]);
-	wnd.map_cp = map_init(wnd.map);
+	wnd.map_cp = map_init((const t_data**)wnd.map);
 	get_mlx(&wnd);
 	wnd.bytes /= 8;
 	wnd.cell = 5;
