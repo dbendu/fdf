@@ -3,7 +3,7 @@ NAME = fdf
 FLAGS = -Wall -Wextra -Werror -I./libft/includes
 
 MLXFLAGS_LINUX = -L minilibx/minilibx_linux -I minilibx/minilibx_linux	-lmlx -lXext -lX11
-MLXFLAGS_MACOS = -L minilibx/minilibx_macos -I minilibx/minilibx_macos 	-lmlx -framework OpenGL -framework AppKit
+MLXFLAGS_MACOS = -L minilibx/minilibx_macos -I minilibx/minilibx_macos 	-lmlx -framework OpenGL -framework AppKit -framework OpenCL
 
 
 SRC =	main.c			draw_line.c			input.c		draw_map.c		\

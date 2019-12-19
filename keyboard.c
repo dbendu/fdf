@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:41:06 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/17 19:07:58 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/19 16:38:28 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,16 @@ int				key_press(int keycode, t_wnd *wnd)
 	if (keycode != UP && keycode != DOWN && keycode != LEFT && keycode != RIGHT)
 		rotate(wnd);
 	draw_map(wnd);
+	if (keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT)
+		wnd->is_anim = TRUE;
+	if (keycode == UP)
+		wnd->shift_to = UP;
+	else if (keycode == DOWN)
+		wnd->shift_to = DOWN;
+	else if (keycode == LEFT)
+		wnd->shift_to = LEFT;
+	else if (keycode == RIGHT)
+		wnd->shift_to = RIGHT;
+	printf("%d\n", wnd->is_anim);
 	return (1);
 }

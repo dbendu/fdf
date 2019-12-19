@@ -6,7 +6,7 @@
 /*   By: dbendu <dbendu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 01:34:25 by dbendu            #+#    #+#             */
-/*   Updated: 2019/12/17 18:56:38 by dbendu           ###   ########.fr       */
+/*   Updated: 2019/12/19 16:30:07 by dbendu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <math.h>
 # include <pthread.h>
+# include <OpenCL/cl.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -172,6 +173,8 @@ typedef struct	s_wnd
 	t_bool		show_menu;
 	t_bool		show_info;
 	t_bool		threads;
+	t_bool		is_anim;
+	int			shift_to;
 }				t_wnd;
 
 typedef struct	s_threads
@@ -185,8 +188,7 @@ typedef struct	s_threads
 t_data			**get_data(const char *filename);
 
 void			draw_line(t_wnd *wnd, t_point a, t_point b);
-int			draw_map(t_wnd *wnd);
-// void			draw_map(t_wnd *wnd);
+void			draw_map(t_wnd *wnd);
 
 void			shift_map(t_wnd *wnd, int32_t x_, int32_t y_);
 void			rotate(t_wnd *wnd);
